@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bitpanda MCP — Developer Documentation</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bp-green:        #2cec9a;
+      --bp-green-dim:    #20d488;
+      --bp-green-faint:  rgba(44, 236, 154, 0.07);
+      --bp-green-border: rgba(44, 236, 154, 0.2);
+      --bp-teal:         #103e36;
+      --bp-teal-light:   #174f44;
+
+      --bg:          #0C0C0E;
+      --bg-nav:      rgba(12, 12, 14, 0.92);
+      --bg-sidebar:  #0F0F12;
+      --bg-surface:  #161619;
+      --bg-surface2: #1C1C21;
+      --bg-code:     #111115;
+      --border:      #222228;
+      --border-soft: #1A1A1F;
+      --text:        #F2F2F5;
+      --text-muted:  #8A8A9A;
+      --text-faint:  #44444F;
+
+      --nav-h:       56px;
+      --sidebar-w:   240px;
+      --toc-w:       220px;
+      --content-max: 720px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      font-size: 14.5px;
+    }
+
+    /* ─── NAV ─── */
+    header {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 200; height: var(--nav-h);
+      background: var(--bg-nav); backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; padding: 0 28px;
+    }
+
+    .nav-logo {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none; color: var(--text);
+      font-weight: 700; font-size: 15px; letter-spacing: -0.02em;
+      flex-shrink: 0;
+    }
+    .nav-logo img { height: 32px; width: auto; flex-shrink: 0; }
+
+    .nav-spacer { flex: 1; }
+
+    .nav-link {
+      font-size: 13.5px; color: var(--text-muted);
+      text-decoration: none; padding: 6px 12px; border-radius: 7px;
+      transition: all 0.15s;
+    }
+    .nav-link:hover { color: var(--text); background: var(--bg-surface); text-decoration: none; }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 7px 16px; border-radius: 8px; font-size: 13px;
+      font-weight: 600; text-decoration: none; border: none; cursor: pointer;
+      transition: all 0.15s; white-space: nowrap;
+    }
+    .btn:hover { text-decoration: none; }
+    .btn-ghost { background: transparent; color: var(--text-muted); border: 1px solid var(--border); }
+    .btn-ghost:hover { color: var(--text); border-color: #333340; }
+    .btn-primary { background: var(--bp-green); color: #050508; font-weight: 700; }
+    .btn-primary:hover { background: var(--bp-green-dim); transform: translateY(-1px); }
+
+    /* ─── LAYOUT ─── */
+    .layout { display: flex; padding-top: var(--nav-h); min-height: 100vh; }
+
+    /* ─── SIDEBAR ─── */
+    .sidebar {
+      position: fixed; top: var(--nav-h); left: 0;
+      width: var(--sidebar-w); height: calc(100vh - var(--nav-h));
+      overflow-y: auto; padding: 24px 0 40px;
+      border-right: 1px solid var(--border-soft);
+      background: var(--bg-sidebar);
+      scrollbar-width: thin; scrollbar-color: var(--border) transparent;
+    }
+    .sb-group { margin-bottom: 22px; }
+    .sb-group-title {
+      display: flex; align-items: center; gap: 8px;
+      padding: 0 16px 6px; font-size: 12px; font-weight: 700;
+      letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-faint);
+    }
+    .sb-group-icon { width: 14px; height: 14px; opacity: 0.45; flex-shrink: 0; }
+    .sb-links { list-style: none; }
+    .sb-links a {
+      display: flex; align-items: center; padding: 5px 16px;
+      font-size: 13.5px; color: var(--text-muted); text-decoration: none;
+      transition: color 0.12s, background 0.12s;
+      border-left: 2px solid transparent; margin: 1px 0;
+    }
+    .sb-links a:hover { color: var(--text); background: rgba(255,255,255,0.03); }
+    .sb-links a.active { color: var(--bp-green); background: var(--bp-green-faint); border-left-color: var(--bp-green); font-weight: 500; }
+    .sb-divider { height: 1px; background: var(--border-soft); margin: 8px 16px 16px; }
+
+    /* ─── CONTENT ─── */
+    .content-wrap { flex: 1; margin-left: var(--sidebar-w); margin-right: var(--toc-w); min-width: 0; }
+    .content { max-width: var(--content-max); margin: 0 auto; padding: 44px 40px 96px; }
+
+    /* ─── TOC ─── */
+    .toc {
+      position: fixed; top: var(--nav-h); right: 0;
+      width: var(--toc-w); height: calc(100vh - var(--nav-h));
+      overflow-y: auto; padding: 32px 20px 40px;
+      scrollbar-width: thin; scrollbar-color: var(--border) transparent;
+    }
+    .toc-title {
+      display: flex; align-items: center; gap: 7px;
+      font-size: 11px; font-weight: 700; letter-spacing: 0.05em;
+      text-transform: uppercase; color: var(--text-faint); margin-bottom: 14px;
+    }
+    .toc-list { list-style: none; }
+    .toc-list li { margin: 2px 0; }
+    .toc-list a {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 12.5px; color: var(--text-faint);
+      text-decoration: none; padding: 3px 0; transition: color 0.12s; line-height: 1.4;
+    }
+    .toc-list a::before {
+      content: ''; width: 5px; height: 5px; border-radius: 50%;
+      border: 1px solid var(--text-faint); flex-shrink: 0; transition: all 0.12s;
+    }
+    .toc-list a:hover { color: var(--text-muted); text-decoration: none; }
+    .toc-list a:hover::before { border-color: var(--text-muted); }
+    .toc-list a.active { color: var(--bp-green); font-weight: 500; }
+    .toc-list a.active::before { background: var(--bp-green); border-color: var(--bp-green); }
+
+    /* ─── TYPOGRAPHY ─── */
+    .breadcrumb { font-size: 12px; color: var(--bp-green); font-weight: 500; letter-spacing: 0.02em; margin-bottom: 14px; scroll-margin-top: calc(var(--nav-h) + 32px); }
+    h1 { font-size: 32px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.18; color: #fff; margin-bottom: 14px; }
+    .page-lead { font-size: 16px; line-height: 1.7; color: var(--text-muted); margin-bottom: 36px; max-width: 580px; }
+    .page-divider { height: 1px; background: var(--border); margin: 36px 0; scroll-margin-top: calc(var(--nav-h) + 32px); }
+    h2 { font-size: 20px; font-weight: 700; letter-spacing: -0.02em; color: #fff; margin: 40px 0 14px; scroll-margin-top: calc(var(--nav-h) + 20px); }
+    h3 { font-size: 11px; font-weight: 700; color: var(--text-faint); margin: 22px 0 8px; letter-spacing: 0.06em; text-transform: uppercase; }
+    p { color: var(--text-muted); margin-bottom: 14px; line-height: 1.7; }
+    p:last-child { margin-bottom: 0; }
+    a { color: var(--bp-green); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ─── CALLOUT ─── */
+    .callout {
+      display: flex; gap: 12px;
+      background: var(--bg-surface); border: 1px solid var(--border);
+      border-radius: 10px; padding: 14px 18px; margin: 22px 0;
+      font-size: 13.5px; color: var(--text-muted); line-height: 1.6;
+    }
+    .callout-icon { width: 16px; height: 16px; flex-shrink: 0; margin-top: 2px; opacity: 0.6; }
+    .callout.green { border-color: var(--bp-green-border); background: var(--bp-green-faint); }
+    .callout.warning { border-color: rgba(251,191,36,0.25); background: rgba(251,191,36,0.05); }
+    .callout strong { color: var(--text); }
+
+    /* ─── TABS ─── */
+    .tab-group { margin: 22px 0; }
+    .tab-bar { display: flex; border-bottom: 1px solid var(--border); }
+    .tab {
+      padding: 8px 16px; font-size: 13px; font-weight: 500; color: var(--text-muted);
+      cursor: pointer; border: none; background: transparent;
+      border-bottom: 2px solid transparent; margin-bottom: -1px; transition: all 0.15s;
+    }
+    .tab:hover { color: var(--text); }
+    .tab.active { color: var(--text); border-bottom-color: var(--bp-green); }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ─── CODE ─── */
+    .code-block { background: var(--bg-code); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin: 12px 0; }
+    .code-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 9px 16px; background: var(--bg-surface);
+      border-bottom: 1px solid var(--border);
+      font-size: 11.5px; font-weight: 600; color: var(--text-faint); letter-spacing: 0.04em;
+    }
+    .copy-btn {
+      background: var(--bg-surface2); border: 1px solid var(--border); color: var(--text-faint);
+      font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 5px; cursor: pointer; transition: all 0.15s;
+    }
+    .copy-btn:hover { color: var(--text-muted); border-color: #333340; }
+    .copy-btn.copied { color: var(--bp-green); border-color: var(--bp-green-border); }
+    pre { padding: 18px 20px; overflow-x: auto; font-size: 13px; line-height: 1.75; scrollbar-width: thin; scrollbar-color: var(--border) transparent; }
+    code { font-family: "Berkeley Mono","SF Mono","Fira Code",Consolas,monospace; color: var(--text); }
+    p code, li code, td code { background: var(--bg-surface2); border: 1px solid var(--border); padding: 1px 6px; border-radius: 5px; font-size: 12px; color: #C8C8E0; }
+
+    /* ─── STEPS ─── */
+    .steps { list-style: none; counter-reset: steps; margin: 18px 0; }
+    .steps > li { counter-increment: steps; display: flex; gap: 14px; margin-bottom: 18px; align-items: flex-start; }
+    .steps > li::before {
+      content: counter(steps); width: 24px; height: 24px;
+      background: var(--bp-teal); border: 1px solid var(--bp-teal-light); border-radius: 50%;
+      color: var(--bp-green); font-size: 12px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px;
+    }
+    .steps > li div { flex: 1; }
+    .steps > li > div > strong:first-child { display: block; color: var(--text); margin-bottom: 3px; font-size: 14px; }
+    .steps > li p { margin: 0; font-size: 13.5px; }
+    .steps > li p strong { color: inherit; font-weight: inherit; }
+
+    /* ─── TOOL CARDS ─── */
+    .tools-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 16px 0; }
+    .tool-card { background: var(--bg-surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; transition: border-color 0.15s; }
+    .tool-card:hover { border-color: var(--bp-green-border); }
+    .tool-card-name { font-family: "Berkeley Mono","SF Mono",Consolas,monospace; font-size: 12.5px; font-weight: 600; color: var(--bp-green); margin-bottom: 6px; }
+    .tool-card-tag { float: right; font-size: 10.5px; font-weight: 600; padding: 2px 7px; border-radius: 4px; background: var(--bp-teal); color: var(--bp-green); border: 1px solid var(--bp-teal-light); margin-left: 8px; margin-top: 1px; }
+    .tool-card p { font-size: 12.5px; color: var(--text-muted); margin: 0; line-height: 1.5; }
+
+    /* ─── PARAM TABLE ─── */
+    .table-wrap { overflow-x: auto; margin: 16px 0; border: 1px solid var(--border); border-radius: 10px; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    thead tr { background: var(--bg-surface); }
+    th { padding: 10px 14px; text-align: left; font-size: 11px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text-faint); border-bottom: 1px solid var(--border); }
+    td { padding: 10px 14px; border-bottom: 1px solid var(--border-soft); color: var(--text-muted); vertical-align: top; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(255,255,255,0.015); }
+    .badge { display: inline-block; font-size: 10.5px; font-weight: 600; padding: 2px 7px; border-radius: 4px; }
+    .badge-green { background: var(--bp-teal); color: var(--bp-green); border: 1px solid var(--bp-teal-light); }
+    .badge-gray  { background: var(--bg-surface2); color: var(--text-faint); border: 1px solid var(--border); }
+
+    /* ─── FAQ ─── */
+    details { border: 1px solid var(--border); border-radius: 10px; margin-bottom: 8px; overflow: hidden; }
+    summary { padding: 14px 18px; font-weight: 600; font-size: 14px; color: var(--text); cursor: pointer; user-select: none; list-style: none; display: flex; align-items: center; gap: 10px; transition: background 0.12s; }
+    summary::-webkit-details-marker { display: none; }
+    summary::after { content: '+'; margin-left: auto; font-size: 18px; font-weight: 400; color: var(--text-faint); line-height: 1; }
+    details[open] summary::after { content: '−'; color: var(--bp-green); }
+    summary:hover { background: rgba(255,255,255,0.02); }
+    details[open] summary { border-bottom: 1px solid var(--border); }
+    .faq-body { padding: 14px 18px; font-size: 13.5px; color: var(--text-muted); line-height: 1.7; }
+    .faq-body p { margin-bottom: 8px; }
+    .faq-body p:last-child { margin-bottom: 0; }
+
+    /* ─── SYNTAX ─── */
+    .kw { color: #A78BFA; }
+    .st { color: #FBD38D; }
+    .cm { color: var(--text-faint); font-style: italic; }
+    .ky { color: var(--bp-green); }
+    .nu { color: #F9A8D4; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 1100px) { .toc { display: none; } .content-wrap { margin-right: 0; } }
+    @media (max-width: 768px) { .sidebar { display: none; } .content-wrap { margin-left: 0; } .content { padding: 32px 20px 64px; } h1 { font-size: 26px; } .tools-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="/" class="nav-logo">
+    <img src="/assets/bitpanda-lettermark.png" alt="Bitpanda" />
+    Bitpanda Builders
+  </a>
+  <div class="nav-spacer"></div>
+  <a href="https://labs.bitpanda.com" target="_blank" rel="noopener" class="nav-link">Bitpanda Labs ↗</a>
+  <a href="https://developers.bitpanda.com" target="_blank" rel="noopener" class="nav-link">Developer API ↗</a>
+</header>
+
+<div class="layout">
+
+  <aside class="sidebar">
+    <div class="sb-group">
+      <ul class="sb-links">
+        <li><a href="#intro" class="active">
+          <svg style="width:14px;height:14px;margin-right:8px;opacity:0.45;flex-shrink:0" viewBox="0 0 16 16" fill="none"><path d="M8 1L1 4v4c0 3.5 3 6.5 7 7 4-.5 7-3.5 7-7V4L8 1z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+          Get started
+        </a></li>
+        <li><a href="#quickstart">
+          <svg style="width:14px;height:14px;margin-right:8px;opacity:0.45;flex-shrink:0" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.5"/><rect x="9" y="1" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.5"/><rect x="1" y="9" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.5"/><rect x="9" y="9" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.5"/></svg>
+          AI clients
+        </a></li>
+        <li><a href="#tools">
+          <svg style="width:14px;height:14px;margin-right:8px;opacity:0.45;flex-shrink:0" viewBox="0 0 16 16" fill="none"><path d="M2 4h12M2 8h12M2 12h7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          Reference
+        </a></li>
+        <li><a href="#api-key">
+          <svg style="width:14px;height:14px;margin-right:8px;opacity:0.45;flex-shrink:0" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.5"/><path d="M8 5v3l2 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          Advanced
+        </a></li>
+        <li><a href="#faq">
+          <svg style="width:14px;height:14px;margin-right:8px;opacity:0.45;flex-shrink:0" viewBox="0 0 16 16" fill="none"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zm0 3a.75.75 0 110 1.5A.75.75 0 018 4zm-.75 3h1.5v4.5h-1.5V7z" fill="currentColor"/></svg>
+          FAQ
+        </a></li>
+      </ul>
+    </div>
+  </aside>
+
+  <div class="content-wrap">
+    <div class="content">
+
+      <div class="breadcrumb" id="intro">Get Started</div>
+      <h1>Bitpanda MCP Server</h1>
+      <p class="page-lead">Connect your AI assistant — Claude, ChatGPT, Cursor, or any MCP-compatible client — directly to your Bitpanda account. Ask about your portfolio, check live prices, and review trade history in plain language.</p>
+
+      <div class="callout green">
+        <svg class="callout-icon" viewBox="0 0 16 16" fill="none"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zm0 3a.75.75 0 110 1.5A.75.75 0 018 4zm-.75 3h1.5v4.5h-1.5V7z" fill="currentColor"/></svg>
+        <span><strong>Read-only by design.</strong> All tools are strictly read-only. The server cannot place orders, move funds, or modify your account in any way.</span>
+      </div>
+
+      <div class="page-divider" id="how-it-works"></div>
+      <h2>How it works</h2>
+      <p>The <a href="https://modelcontextprotocol.io" target="_blank" rel="noopener">Model Context Protocol (MCP)</a> is an open standard that lets AI assistants securely connect to external services. The Bitpanda MCP server bridges your AI tool and the <a href="https://developers.bitpanda.com" target="_blank" rel="noopener">Bitpanda Developer API</a>, giving your assistant read-only access to your account data.</p>
+      <p>For consumer AI clients (Claude, ChatGPT, AI agents), authentication is handled via <strong style="color:var(--text)">OAuth</strong> — you authorize the connection through your Bitpanda account with no manual key management. For technical setups and self-hosted deployments, direct API key authentication via the <code>X-Api-Key</code> header is also supported.</p>
+
+      <div class="page-divider" id="quickstart"></div>
+      <h2>Quick start</h2>
+      <p>Most users connect via OAuth in under a minute. Pick your client below.</p>
+
+      <div class="tab-group">
+        <div class="tab-bar" role="tablist">
+          <button class="tab active" onclick="switchTab(event,'tab-gpt','qs')" role="tab">ChatGPT</button>
+          <button class="tab" onclick="switchTab(event,'tab-cd','qs')" role="tab">Claude Desktop</button>
+          <button class="tab" onclick="switchTab(event,'tab-cc','qs')" role="tab">Claude Code</button>
+          <button class="tab" onclick="switchTab(event,'tab-cur','qs')" role="tab">Cursor / VS Code</button>
+        </div>
+
+        <div id="tab-gpt" class="tab-panel active">
+          <ol class="steps">
+            <li><div><strong>Open the connector directory</strong><p>In ChatGPT, go to <em>Settings → Connectors</em> (or click the <em>+</em> menu in a chat → <em>Add apps &amp; connectors</em>).</p></div></li>
+            <li><div><strong>Find Bitpanda</strong><p>Search for <strong>Bitpanda</strong> in the directory and click <em>Connect</em>.</p></div></li>
+            <li><div><strong>Authorize</strong><p>ChatGPT redirects you to Bitpanda to log in and approve access. No API key required.</p></div></li>
+          </ol>
+        </div>
+
+        <div id="tab-cd" class="tab-panel">
+          <ol class="steps">
+            <li><div><strong>Open Connectors</strong><p>In Claude Desktop, go to <em>Customize → Connectors</em>.</p></div></li>
+            <li><div><strong>Find Bitpanda</strong><p>Browse the directory and click <em>Connect</em> on the <strong>Bitpanda</strong> entry.</p></div></li>
+            <li><div><strong>Authorize</strong><p>Claude opens a browser. Log in to Bitpanda and approve access — no API key required.</p></div></li>
+          </ol>
+        </div>
+
+        <div id="tab-cc" class="tab-panel">
+          <div class="code-block">
+            <div class="code-header">TERMINAL <button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <pre><code>claude mcp add --transport http bitpanda https://mcp.bitpanda.com/mcp</code></pre>
+          </div>
+          <div style="padding:12px 20px 16px;font-size:13px;color:var(--text-muted);">Claude will open a browser to authorize your Bitpanda account via OAuth. No API key required.</div>
+        </div>
+
+        <div id="tab-cur" class="tab-panel">
+          <div class="code-block">
+            <div class="code-header">.cursor/mcp.json <button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <pre><code>{
+  <span class="ky">"mcpServers"</span>: {
+    <span class="ky">"bitpanda"</span>: {
+      <span class="ky">"url"</span>: <span class="st">"https://mcp.bitpanda.com/mcp"</span>,
+      <span class="ky">"transport"</span>: <span class="st">"http"</span>
+    }
+  }
+}</code></pre>
+          </div>
+          <div style="padding:12px 20px 16px;font-size:13px;color:var(--text-muted);">On first use your editor opens a browser to authorize via Bitpanda OAuth. No API key required.</div>
+        </div>
+      </div>
+
+      <!-- ─── Per-client sections ─── -->
+      <div class="page-divider" id="chatgpt"></div>
+      <h2>ChatGPT</h2>
+      <p>The Bitpanda MCP server is published in the ChatGPT connector directory. Install it directly from ChatGPT.</p>
+      <ol class="steps">
+        <li><div><strong>Open the connector directory</strong><p>In ChatGPT, go to <em>Settings → Connectors</em>, or click the <em>+</em> menu in any chat and choose <em>Add apps &amp; connectors</em>.</p></div></li>
+        <li><div><strong>Search for Bitpanda</strong><p>Find <strong style="color:var(--text)">Bitpanda</strong> in the directory and click <em>Connect</em>.</p></div></li>
+        <li><div><strong>Authorize via Bitpanda</strong><p>ChatGPT redirects you to Bitpanda's login page. Sign in and approve the connection — Bitpanda issues a short-lived token and ChatGPT manages it for you.</p></div></li>
+        <li><div><strong>Start asking</strong><p>Try: <em>"What is my current BTC value?"</em> or <em>"Summarize my trades from last month."</em> ChatGPT will prompt you to allow the Bitpanda connector to be used.</p></div></li>
+      </ol>
+      <div class="callout">
+        <svg class="callout-icon" viewBox="0 0 16 16" fill="none"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zm0 3a.75.75 0 110 1.5A.75.75 0 018 4zm-.75 3h1.5v4.5h-1.5V7z" fill="currentColor"/></svg>
+        <span>Connectors are available on ChatGPT Plus, Pro, Team, Enterprise, and Edu plans. To revoke access at any time, remove the connector from <em>Settings → Connectors</em>.</span>
+      </div>
+
+      <div class="page-divider" id="claude-desktop"></div>
+      <h2>Claude Desktop</h2>
+      <p>The Bitpanda MCP server is listed in Claude's connector directory. Add it from inside the app — no JSON config or restart required.</p>
+      <ol class="steps">
+        <li><div><strong>Open Connectors</strong><p>In Claude Desktop, go to <em>Customize → Connectors</em>. On Team or Enterprise plans, an organization owner first needs to add the connector under <em>Organization settings → Connectors</em>.</p></div></li>
+        <li><div><strong>Find Bitpanda</strong><p>Browse the directory and click <em>Connect</em> on the <strong>Bitpanda</strong> entry.</p></div></li>
+        <li><div><strong>Authorize via Bitpanda</strong><p>Claude opens a browser tab. Sign in to Bitpanda and approve the connection — Claude stores and refreshes the token automatically.</p></div></li>
+        <li><div><strong>Enable it in a chat</strong><p>Open a conversation, click the <em>+</em> button at the lower-left of the chat, and choose <em>Connectors</em> to enable Bitpanda for that chat. Try: <em>"Show me my top holdings."</em></p></div></li>
+      </ol>
+      <div class="callout">
+        <svg class="callout-icon" viewBox="0 0 16 16" fill="none"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zm0 3a.75.75 0 110 1.5A.75.75 0 018 4zm-.75 3h1.5v4.5h-1.5V7z" fill="currentColor"/></svg>
+        <span>Connectors are available on Claude <strong>Pro, Max, Team, and Enterprise</strong> plans. Manage or remove the connector at any time from <em>Customize → Connectors</em>.</span>
+      </div>
+
+      <div class="page-divider" id="claude-code"></div>
+      <h2>Claude Code</h2>
+      <p>Claude Code is Anthropic's CLI for AI-assisted development. Add the MCP server with a single command — it connects over HTTP and authenticates via OAuth.</p>
+      <ol class="steps">
+        <li><div><strong>Add the server</strong><p>Run the command below in your terminal.</p></div></li>
+        <li><div><strong>Authorize</strong><p>Claude opens a browser. Log in to Bitpanda and grant access — no API key needed.</p></div></li>
+        <li><div><strong>Start asking</strong><p>Try: <em>"What is my current BTC value?"</em> or <em>"Summarize my trades from last month."</em></p></div></li>
+      </ol>
+      <div class="code-block">
+        <div class="code-header">TERMINAL <button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+        <pre><code>claude mcp add --transport http bitpanda https://mcp.bitpanda.com/mcp</code></pre>
+      </div>
+      <div class="code-block">
+        <div class="code-header">VERIFY <button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+        <pre><code>claude mcp list</code></pre>
+      </div>
+
+      <div class="page-divider" id="cursor"></div>
+      <h2>Cursor / VS Code / Windsurf</h2>
+      <p>Most modern AI editors support remote MCP servers. Add the server URL — the OAuth flow runs in the browser on first use.</p>
+      <h3>VS Code (.vscode/mcp.json)</h3>
+      <div class="code-block">
+        <div class="code-header">.vscode/mcp.json <button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+        <pre><code>{
+  <span class="ky">"servers"</span>: {
+    <span class="ky">"bitpanda"</span>: {
+      <span class="ky">"type"</span>: <span class="st">"http"</span>,
+      <span class="ky">"url"</span>: <span class="st">"https://mcp.bitpanda.com/mcp"</span>
+    }
+  }
+}</code></pre>
+      </div>
+
+      <!-- ─── Tools ─── -->
+      <div class="page-divider" id="tools"></div>
+      <h2>Available tools</h2>
+      <p>All tools are <strong style="color:var(--text)">read-only</strong> and annotated with <code>readOnlyHint: true</code>.</p>
+
+      <div class="tools-grid">
+        <div class="tool-card">
+          <div><span class="tool-card-tag">portfolio</span><div class="tool-card-name">get_portfolio</div></div>
+          <p>Aggregated portfolio with EUR valuations. Optional <code>sort_by</code>: <code>value</code> (default) or <code>name</code>.</p>
+        </div>
+        <div class="tool-card">
+          <div><span class="tool-card-tag">market-data</span><div class="tool-card-name">get_price</div></div>
+          <p>Current EUR price for a single asset by ticker symbol — BTC, ETH, SOL, and more.</p>
+        </div>
+        <div class="tool-card">
+          <div><span class="tool-card-tag">market-data</span><div class="tool-card-name">list_prices</div></div>
+          <p>Ticker prices for all held assets. Set <code>all_assets=true</code> for the full market-wide list. Supports <code>limit</code>.</p>
+        </div>
+        <div class="tool-card">
+          <div><span class="tool-card-tag">market-data</span><div class="tool-card-name">get_asset</div></div>
+          <p>Asset metadata (name, symbol, type) by asset UUID.</p>
+        </div>
+        <div class="tool-card">
+          <div><span class="tool-card-tag">wallets</span><div class="tool-card-name">list_wallets</div></div>
+          <p>Asset wallet balances. Filter by <code>non_zero</code>, <code>asset_id</code>. Supports <code>limit</code> and <code>page_size</code>.</p>
+        </div>
+        <div class="tool-card">
+          <div><span class="tool-card-tag">transactions</span><div class="tool-card-name">list_transactions</div></div>
+          <p>Unified transaction history — deposits, withdrawals, transfers, trades. Filters: <code>wallet_id</code>, <code>flow</code>, <code>asset_id</code>, <code>from_including</code>, <code>to_excluding</code>. Set <code>all=true</code> to fetch all pages.</p>
+        </div>
+        <div class="tool-card">
+          <div><span class="tool-card-tag">trades</span><div class="tool-card-name">list_trades</div></div>
+          <p>Buy/sell trade history derived from transactions. Filters: <code>trade_type</code> (buy/sell), <code>asset_type</code>, date range. Set <code>all=true</code> to fetch all pages.</p>
+        </div>
+      </div>
+
+      <!-- ─── Prompts ─── -->
+      <div class="page-divider" id="prompts"></div>
+      <h2>Built-in prompts</h2>
+      <p>Pre-configured templates that guide the AI through a specific analysis. Invoke by name in your client.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Prompt</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>portfolio_summary</code></td><td>Analyze portfolio composition, EUR value, and concentration risk across held assets.</td></tr>
+            <tr><td><code>recent_activity</code></td><td>Summarize recent trades and transactions, highlighting significant movements.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ─── API key (advanced) ─── -->
+      <div class="page-divider" id="api-key"></div>
+      <h2>API key setup <span style="font-size:12px;font-weight:600;padding:3px 8px;border-radius:5px;background:var(--bg-surface2);color:var(--text-faint);border:1px solid var(--border);vertical-align:middle;margin-left:8px;">Advanced</span></h2>
+      <p>Direct API key authentication is available for custom scripts, programmatic integrations, and clients that do not support OAuth. Pass your Bitpanda API key in the <code>X-Api-Key</code> header with each request.</p>
+
+      <div class="callout warning">
+        <svg class="callout-icon" viewBox="0 0 16 16" fill="none"><path d="M8 1l7 13H1L8 1z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M8 6v4M8 11.5v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <span>If your client supports OAuth, prefer that — it requires no key management and limits exposure. Use API keys only when OAuth is not available.</span>
+      </div>
+
+      <h3>Generate your API key</h3>
+      <ol class="steps">
+        <li><div><strong>Log in to Bitpanda</strong><p>Go to <a href="https://web.bitpanda.com" target="_blank" rel="noopener">web.bitpanda.com</a> and sign in.</p></div></li>
+        <li><div><strong>Open API key settings</strong><p>Navigate to <a href="https://web.bitpanda.com/apikey" target="_blank" rel="noopener">web.bitpanda.com/apikey</a> or <em>Profile → API key</em>.</p></div></li>
+        <li><div><strong>Generate a new key</strong><p>Click <em>Generate new API key</em>. Copy it — you won't see it again.</p></div></li>
+      </ol>
+
+      <h3>Use with any MCP client</h3>
+      <div class="code-block">
+        <div class="code-header">MCP CLIENT CONFIG <button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+        <pre><code>{
+  <span class="ky">"mcpServers"</span>: {
+    <span class="ky">"bitpanda"</span>: {
+      <span class="ky">"url"</span>: <span class="st">"https://mcp.bitpanda.com/mcp"</span>,
+      <span class="ky">"headers"</span>: {
+        <span class="ky">"X-Api-Key"</span>: <span class="st">"YOUR_BITPANDA_API_KEY"</span>
+      }
+    }
+  }
+}</code></pre>
+      </div>
+
+      <h3>Claude Code with API key (stdio / local)</h3>
+      <div class="code-block">
+        <div class="code-header">TERMINAL <button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+        <pre><code>claude mcp add bitpanda \
+  -e <span class="ky">BITPANDA_API_KEY</span>=<span class="st">your-key-here</span> \
+  -- uvx --from <span class="st">git+https://github.com/bitpanda-labs/bitpanda-mcp</span> bitpanda-mcp</code></pre>
+      </div>
+
+      <!-- ─── FAQ ─── -->
+      <div class="page-divider" id="faq"></div>
+      <h2>FAQ</h2>
+
+      <details>
+        <summary>Do I need a Bitpanda account?</summary>
+        <div class="faq-body"><p>Yes. You need an active <a href="https://www.bitpanda.com" target="_blank" rel="noopener">Bitpanda</a> account. For OAuth-based clients (Claude, ChatGPT) just log in when prompted. For API key access, generate a key at <a href="https://web.bitpanda.com/apikey" target="_blank" rel="noopener">web.bitpanda.com/apikey</a>.</p></div>
+      </details>
+
+      <details>
+        <summary>Can my AI assistant place trades or move funds?</summary>
+        <div class="faq-body"><p>No. All tools are strictly read-only (<code>readOnlyHint: true</code>). The server cannot place orders, withdraw funds, or modify your account in any way.</p></div>
+      </details>
+
+      <details>
+        <summary>How does OAuth authentication work?</summary>
+        <div class="faq-body">
+          <p>When you connect via Claude, ChatGPT, or another OAuth-enabled client, the client redirects you to Bitpanda's login page. After you log in and approve access, Bitpanda issues a short-lived token to the MCP server — your Bitpanda password is never shared with your AI client.</p>
+          <p>The token is stored securely by your AI client and refreshed automatically.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>What is MCP?</summary>
+        <div class="faq-body"><p>The <a href="https://modelcontextprotocol.io" target="_blank" rel="noopener">Model Context Protocol</a> is an open standard for connecting AI assistants to external data sources. Supported by Claude, ChatGPT, Cursor, VS Code Copilot, Windsurf, and more.</p></div>
+      </details>
+
+      <details>
+        <summary>Is this the official Bitpanda MCP server?</summary>
+        <div class="faq-body"><p>Yes. Maintained by <a href="https://labs.bitpanda.com" target="_blank" rel="noopener">Bitpanda Labs</a> — the official MCP integration for the Bitpanda platform.</p></div>
+      </details>
+
+      <details>
+        <summary>Do I need to install anything for OAuth-based clients?</summary>
+        <div class="faq-body"><p>No local installation required. Add <code>https://mcp.bitpanda.com/mcp</code> to your client config and authorize via browser. The server runs on Bitpanda's infrastructure.</p></div>
+      </details>
+
+    </div>
+  </div>
+
+  <aside class="toc">
+    <div class="toc-title">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1 2h10M1 6h10M1 10h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      On this page
+    </div>
+    <ul class="toc-list">
+      <li><a href="#intro" class="active">Introduction</a></li>
+      <li><a href="#how-it-works">How it works</a></li>
+      <li><a href="#quickstart">Quick start</a></li>
+      <li><a href="#chatgpt">ChatGPT</a></li>
+      <li><a href="#claude-desktop">Claude Desktop</a></li>
+      <li><a href="#claude-code">Claude Code</a></li>
+      <li><a href="#cursor">Cursor / VS Code</a></li>
+      <li><a href="#tools">Tools</a></li>
+      <li><a href="#prompts">Prompts</a></li>
+      <li><a href="#api-key">API key setup</a></li>
+      <li><a href="#faq">FAQ</a></li>
+    </ul>
+  </aside>
+
+</div>
+
+<script>
+  function switchTab(e, targetId, groupId) {
+    const panel = document.getElementById(targetId);
+    panel.closest('.tab-group').querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    panel.classList.add('active');
+    e.target.closest('.tab-bar').querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    e.target.classList.add('active');
+  }
+
+  function copyCode(btn) {
+    const pre = btn.closest('.code-block').querySelector('pre');
+    navigator.clipboard.writeText(pre ? pre.innerText : '').then(() => {
+      btn.textContent = 'Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+    });
+  }
+
+  const sbLinks = document.querySelectorAll('.sb-links a');
+  const tocLinks = document.querySelectorAll('.toc-list a');
+
+  // Map every section id to the sidebar group it belongs to
+  const sbGroup = {
+    'intro': '#intro', 'how-it-works': '#intro',
+    'quickstart': '#quickstart',
+    'claude-code': '#quickstart', 'claude-desktop': '#quickstart',
+    'chatgpt': '#quickstart', 'cursor': '#quickstart',
+    'tools': '#tools', 'prompts': '#tools',
+    'api-key': '#api-key', 
+    'faq': '#faq',
+  };
+
+  function setActive(id) {
+    const tocHref = '#' + id;
+    const sbHref = sbGroup[id] || tocHref;
+    sbLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === sbHref));
+    tocLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === tocHref));
+  }
+
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) setActive(e.target.id); });
+  }, { rootMargin: '-56px 0px -70% 0px', threshold: 0 });
+
+  document.querySelectorAll('[id]').forEach(s => io.observe(s));
+</script>
+
+</body>
+</html>
