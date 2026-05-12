@@ -1,0 +1,274 @@
+---
+layout: default
+title: Bitpanda CLI — Developer Documentation
+description: A command-line tool for the Bitpanda Developer API. View your portfolio, check prices, and browse trades from your terminal.
+---
+
+{% include docs-style.html %}
+
+<div class="layout">
+
+  <aside class="sidebar">
+    <div class="sb-group">
+      <ul class="sb-links">
+        <li><a href="#intro" class="active">
+          <svg style="width:14px;height:14px;margin-right:8px;opacity:0.45;flex-shrink:0" viewBox="0 0 16 16" fill="none"><path d="M8 1L1 4v4c0 3.5 3 6.5 7 7 4-.5 7-3.5 7-7V4L8 1z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+          Get started
+        </a></li>
+        <li><a href="#install">
+          <svg style="width:14px;height:14px;margin-right:8px;opacity:0.45;flex-shrink:0" viewBox="0 0 16 16" fill="none"><path d="M8 1v10m0 0L4 7m4 4l4-4M2 14h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Install
+        </a></li>
+        <li><a href="#configure">
+          <svg style="width:14px;height:14px;margin-right:8px;opacity:0.45;flex-shrink:0" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="2" stroke="currentColor" stroke-width="1.5"/><path d="M8 1v2M8 13v2M15 8h-2M3 8H1M12.95 3.05l-1.4 1.4M4.45 11.55l-1.4 1.4M12.95 12.95l-1.4-1.4M4.45 4.45l-1.4-1.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          Configure
+        </a></li>
+        <li><a href="#commands">
+          <svg style="width:14px;height:14px;margin-right:8px;opacity:0.45;flex-shrink:0" viewBox="0 0 16 16" fill="none"><path d="M2 4h12M2 8h12M2 12h7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          Commands
+        </a></li>
+        <li><a href="#advanced">
+          <svg style="width:14px;height:14px;margin-right:8px;opacity:0.45;flex-shrink:0" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.5"/><path d="M8 5v3l2 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          Advanced
+        </a></li>
+      </ul>
+    </div>
+  </aside>
+
+  <div class="content-wrap">
+    <div class="content">
+
+      <div class="breadcrumb" id="intro">Get Started</div>
+      <h1>Bitpanda CLI</h1>
+      <p class="page-lead">A fast, scriptable command-line tool for the <a href="https://developers.bitpanda.com" target="_blank" rel="noopener">Bitpanda Developer API</a>. View your portfolio, check live prices, and browse trades and transactions — all from your terminal.</p>
+
+      <div class="callout green">
+        <svg class="callout-icon" viewBox="0 0 16 16" fill="none"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zm0 3a.75.75 0 110 1.5A.75.75 0 018 4zm-.75 3h1.5v4.5h-1.5V7z" fill="currentColor"/></svg>
+        <span><strong>Read-only.</strong> All commands are read-only. The CLI cannot place orders, move funds, or modify your account.</span>
+      </div>
+
+      <div class="page-divider" id="install"></div>
+      <h2>Install</h2>
+      <p>Pick the install method that suits your platform.</p>
+
+      <div class="tab-group">
+        <div class="tab-bar" role="tablist">
+          <button class="tab active" onclick="switchTab(event,'tab-brew','inst')" role="tab">Homebrew</button>
+          <button class="tab" onclick="switchTab(event,'tab-shell','inst')" role="tab">Shell script</button>
+          <button class="tab" onclick="switchTab(event,'tab-deb','inst')" role="tab">Debian / Ubuntu</button>
+          <button class="tab" onclick="switchTab(event,'tab-rpm','inst')" role="tab">Fedora / RHEL</button>
+          <button class="tab" onclick="switchTab(event,'tab-go','inst')" role="tab">Go</button>
+          <button class="tab" onclick="switchTab(event,'tab-src','inst')" role="tab">From source</button>
+        </div>
+
+        <div class="tab-panel active" id="tab-brew">
+          <div class="code-block">
+            <div class="code-header"><span>shell</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <pre><code>brew install bitpanda-labs/tap/bp</code></pre>
+          </div>
+          <p style="font-size:13px;color:var(--text-muted)">Available for macOS and Linux via Homebrew.</p>
+        </div>
+
+        <div class="tab-panel" id="tab-shell">
+          <div class="code-block">
+            <div class="code-header"><span>shell</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <pre><code>curl -fsSL https://raw.githubusercontent.com/bitpanda-labs/bitpanda-cli/main/install.sh | sh</code></pre>
+          </div>
+          <p style="font-size:13px;color:var(--text-muted)">Detects your OS and architecture, downloads the matching binary.</p>
+        </div>
+
+        <div class="tab-panel" id="tab-deb">
+          <p style="padding:12px 0;font-size:13px;color:var(--text-muted)">Download the <code>.deb</code> from the <a href="https://github.com/bitpanda-labs/bitpanda-cli/releases/latest" target="_blank" rel="noopener">latest release</a>, then:</p>
+          <div class="code-block">
+            <div class="code-header"><span>shell</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <pre><code>sudo dpkg -i bp_*_linux_amd64.deb</code></pre>
+          </div>
+        </div>
+
+        <div class="tab-panel" id="tab-rpm">
+          <p style="padding:12px 0;font-size:13px;color:var(--text-muted)">Download the <code>.rpm</code> from the <a href="https://github.com/bitpanda-labs/bitpanda-cli/releases/latest" target="_blank" rel="noopener">latest release</a>, then:</p>
+          <div class="code-block">
+            <div class="code-header"><span>shell</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <pre><code>sudo rpm -i bp_*_linux_amd64.rpm</code></pre>
+          </div>
+        </div>
+
+        <div class="tab-panel" id="tab-go">
+          <div class="code-block">
+            <div class="code-header"><span>shell</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <pre><code>go install github.com/bitpanda-labs/bitpanda-cli/cmd/bp@latest</code></pre>
+          </div>
+        </div>
+
+        <div class="tab-panel" id="tab-src">
+          <div class="code-block">
+            <div class="code-header"><span>shell</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <pre><code>git clone https://github.com/bitpanda-labs/bitpanda-cli.git
+cd bitpanda-cli
+make install</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <p style="font-size:13px;color:var(--text-muted)">Pre-built binaries for all platforms are also available on the <a href="https://github.com/bitpanda-labs/bitpanda-cli/releases/latest" target="_blank" rel="noopener">releases page</a>.</p>
+
+      <div class="page-divider" id="configure"></div>
+      <h2>Configure</h2>
+      <p><code>bp</code> needs a Bitpanda API key. Generate one at <a href="https://web.bitpanda.com/my-account/apikey" target="_blank" rel="noopener">web.bitpanda.com/my-account/apikey</a> — read-only scopes are sufficient.</p>
+      <p>Provide the key in one of three ways (highest priority first):</p>
+
+      <ol class="steps">
+        <li><div><strong>Per-command flag</strong><p>Pass <code>--api-key YOUR_KEY</code> to any command. Useful for one-off scripts.</p></div></li>
+        <li><div><strong>Environment variable</strong><p>Export <code>BITPANDA_API_KEY</code> in your shell. Best for CI and quick interactive use.</p></div></li>
+        <li><div><strong>Config file</strong><p>Save the key to <code>~/.config/bitpanda/config.yaml</code> with permissions <code>0600</code>. Best for daily desktop use — set once and forget.</p></div></li>
+      </ol>
+
+      <div class="code-block">
+        <div class="code-header"><span>config file setup</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+        <pre><code>mkdir -p ~/.config/bitpanda
+echo "api_key: YOUR_KEY" > ~/.config/bitpanda/config.yaml
+chmod 600 ~/.config/bitpanda/config.yaml</code></pre>
+      </div>
+
+      <div class="callout warning">
+        <svg class="callout-icon" viewBox="0 0 16 16" fill="none"><path d="M8 1l7 13H1L8 1zm0 4v4m0 2v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span><strong>Keep your key safe.</strong> The config file holds your API key in plaintext — restrict it to <code>0600</code>. <code>bp</code> warns on stderr if permissions are looser.</span>
+      </div>
+
+      <div class="page-divider" id="commands"></div>
+      <h2>Commands</h2>
+      <p>Every command supports <code>-o table</code> (default), <code>-o json</code>, and <code>-o csv</code>. Run <code>bp --help</code> or <code>bp &lt;command&gt; --help</code> for full flag reference.</p>
+
+      <div class="tools-grid">
+        <div class="tool-card"><span class="tool-card-tag">portfolio</span><div class="tool-card-name">bp portfolio</div><p>Aggregated holdings with EUR valuations, sortable.</p></div>
+        <div class="tool-card"><span class="tool-card-tag">balances</span><div class="tool-card-name">bp balances</div><p>Raw wallet list with filtering and pagination.</p></div>
+        <div class="tool-card"><span class="tool-card-tag">trades</span><div class="tool-card-name">bp trades</div><p>Buy/sell history with type, asset, and date filters.</p></div>
+        <div class="tool-card"><span class="tool-card-tag">tx</span><div class="tool-card-name">bp transactions</div><p>Full transaction log including rewards and staking.</p></div>
+        <div class="tool-card"><span class="tool-card-tag">price</span><div class="tool-card-name">bp price &lt;SYMBOL&gt;</div><p>Live price and daily change for a single asset.</p></div>
+        <div class="tool-card"><span class="tool-card-tag">prices</span><div class="tool-card-name">bp prices</div><p>Prices for held assets, or all available with <code>--all</code>.</p></div>
+        <div class="tool-card"><span class="tool-card-tag">asset</span><div class="tool-card-name">bp asset &lt;UUID&gt;</div><p>Resolve an asset ID to its name and symbol.</p></div>
+        <div class="tool-card"><span class="tool-card-tag">completion</span><div class="tool-card-name">bp completion</div><p>Generate shell completions (bash, zsh, fish, PowerShell).</p></div>
+      </div>
+
+      <h3>Examples</h3>
+      <div class="code-block">
+        <div class="code-header"><span>shell</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+        <pre><code>bp portfolio --sort value          <span class="cm"># biggest positions first</span>
+bp price BTC                       <span class="cm"># single asset</span>
+bp prices --all                    <span class="cm"># every available price</span>
+bp trades --operation buy --from 2024-01-01
+bp transactions --flow incoming -o csv > tx.csv
+bp portfolio -o json | jq '.[] | select(.eur_value &gt; 100)'</code></pre>
+      </div>
+
+      <h3>Output formats</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Format</th><th>Flag</th><th>Use case</th></tr></thead>
+          <tbody>
+            <tr><td><span class="badge badge-green">table</span></td><td><code>-o table</code> (default)</td><td>Human-readable terminal output</td></tr>
+            <tr><td><span class="badge badge-gray">json</span></td><td><code>-o json</code></td><td>Pipe to <code>jq</code>, scripts, automation</td></tr>
+            <tr><td><span class="badge badge-gray">csv</span></td><td><code>-o csv</code></td><td>Spreadsheets and tax tools</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Exit codes</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Code</th><th>Meaning</th></tr></thead>
+          <tbody>
+            <tr><td><code>0</code></td><td>Success</td></tr>
+            <tr><td><code>1</code></td><td>General error</td></tr>
+            <tr><td><code>2</code></td><td>Authentication error (bad or missing API key)</td></tr>
+            <tr><td><code>3</code></td><td>API error (Bitpanda returned non-2xx)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="page-divider" id="advanced"></div>
+      <h2>Shell completion</h2>
+      <p>Add <code>bp</code> auto-completion to your shell. Pick the matching shell:</p>
+
+      <div class="tab-group">
+        <div class="tab-bar" role="tablist">
+          <button class="tab active" onclick="switchTab(event,'tab-bash','sh')" role="tab">bash</button>
+          <button class="tab" onclick="switchTab(event,'tab-zsh','sh')" role="tab">zsh</button>
+          <button class="tab" onclick="switchTab(event,'tab-fish','sh')" role="tab">fish</button>
+          <button class="tab" onclick="switchTab(event,'tab-ps','sh')" role="tab">PowerShell</button>
+        </div>
+        <div class="tab-panel active" id="tab-bash"><div class="code-block"><div class="code-header"><span>shell</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div><pre><code>source &lt;(bp completion bash)</code></pre></div></div>
+        <div class="tab-panel" id="tab-zsh"><div class="code-block"><div class="code-header"><span>shell</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div><pre><code>source &lt;(bp completion zsh)</code></pre></div></div>
+        <div class="tab-panel" id="tab-fish"><div class="code-block"><div class="code-header"><span>shell</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div><pre><code>bp completion fish | source</code></pre></div></div>
+        <div class="tab-panel" id="tab-ps"><div class="code-block"><div class="code-header"><span>powershell</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div><pre><code>bp completion powershell | Out-String | Invoke-Expression</code></pre></div></div>
+      </div>
+
+      <p>To make it permanent, append the matching command to your shell rc file (<code>~/.bashrc</code>, <code>~/.zshrc</code>, etc.).</p>
+
+      <h2 id="links">Resources</h2>
+      <p>
+        Source code: <a href="https://github.com/bitpanda-labs/bitpanda-cli" target="_blank" rel="noopener">github.com/bitpanda-labs/bitpanda-cli</a><br/>
+        Releases: <a href="https://github.com/bitpanda-labs/bitpanda-cli/releases" target="_blank" rel="noopener">github.com/bitpanda-labs/bitpanda-cli/releases</a><br/>
+        API reference: <a href="https://developers.bitpanda.com" target="_blank" rel="noopener">developers.bitpanda.com</a>
+      </p>
+
+    </div>
+  </div>
+
+  <aside class="toc">
+    <div class="toc-title">On this page</div>
+    <ul class="toc-list">
+      <li><a href="#intro">Overview</a></li>
+      <li><a href="#install">Install</a></li>
+      <li><a href="#configure">Configure</a></li>
+      <li><a href="#commands">Commands</a></li>
+      <li><a href="#advanced">Shell completion</a></li>
+      <li><a href="#links">Resources</a></li>
+    </ul>
+  </aside>
+
+</div>
+
+<script>
+  function switchTab(e, targetId, groupId) {
+    const panel = document.getElementById(targetId);
+    panel.closest('.tab-group').querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    panel.classList.add('active');
+    e.target.closest('.tab-bar').querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    e.target.classList.add('active');
+  }
+
+  function copyCode(btn) {
+    const pre = btn.closest('.code-block').querySelector('pre');
+    navigator.clipboard.writeText(pre ? pre.innerText : '').then(() => {
+      btn.textContent = 'Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+    });
+  }
+
+  const sbLinks = document.querySelectorAll('.sb-links a');
+  const tocLinks = document.querySelectorAll('.toc-list a');
+
+  const sbGroup = {
+    'intro': '#intro',
+    'install': '#install',
+    'configure': '#configure',
+    'commands': '#commands',
+    'advanced': '#advanced',
+    'links': '#advanced',
+  };
+
+  function setActive(id) {
+    const tocHref = '#' + id;
+    const sbHref = sbGroup[id] || tocHref;
+    sbLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === sbHref));
+    tocLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === tocHref));
+  }
+
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) setActive(e.target.id); });
+  }, { rootMargin: '-56px 0px -70% 0px', threshold: 0 });
+
+  document.querySelectorAll('[id]').forEach(s => io.observe(s));
+</script>
