@@ -1,198 +1,185 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bitpanda Builders</title>
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+---
+layout: default
+title: Bitpanda Builders
+description: Documentation and tools for connecting AI agents, command-line workflows, and custom skills to your Bitpanda account.
+---
 
-    :root {
-      --bp-green:        #2cec9a;
-      --bp-green-dim:    #20d488;
-      --bp-green-faint:  rgba(44, 236, 154, 0.07);
-      --bp-green-border: rgba(44, 236, 154, 0.2);
-      --bp-teal:         #103e36;
-      --bp-teal-light:   #174f44;
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-      --bg:          #0C0C0E;
-      --bg-nav:      rgba(12, 12, 14, 0.92);
-      --bg-surface:  #161619;
-      --bg-surface2: #1C1C21;
-      --border:      #222228;
-      --border-soft: #1A1A1F;
-      --text:        #F2F2F5;
-      --text-muted:  #8A8A9A;
-      --text-faint:  #44444F;
+  :root {
+    --bp-green:        #2cec9a;
+    --bp-green-dim:    #20d488;
+    --bp-green-faint:  rgba(44, 236, 154, 0.07);
+    --bp-green-border: rgba(44, 236, 154, 0.2);
+    --bp-teal:         #103e36;
+    --bp-teal-light:   #174f44;
 
-      --nav-h: 56px;
-    }
+    --bg:          #0C0C0E;
+    --bg-nav:      rgba(12, 12, 14, 0.92);
+    --bg-surface:  #161619;
+    --bg-surface2: #1C1C21;
+    --border:      #222228;
+    --border-soft: #1A1A1F;
+    --text:        #F2F2F5;
+    --text-muted:  #8A8A9A;
+    --text-faint:  #44444F;
 
-    html { scroll-behavior: smooth; }
+    --nav-h: 56px;
+  }
 
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.65;
-      font-size: 14.5px;
-      min-height: 100vh;
-    }
+  html { scroll-behavior: smooth; }
 
-    header {
-      position: fixed; top: 0; left: 0; right: 0;
-      z-index: 200; height: var(--nav-h);
-      background: var(--bg-nav); backdrop-filter: blur(16px);
-      border-bottom: 1px solid var(--border);
-      display: flex; align-items: center; padding: 0 28px;
-    }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.65;
+    font-size: 14.5px;
+    min-height: 100vh;
+  }
 
-    .nav-logo {
-      display: flex; align-items: center; gap: 10px;
-      text-decoration: none; color: var(--text);
-      font-weight: 700; font-size: 15px; letter-spacing: -0.02em;
-    }
-    .nav-logo img { height: 32px; width: auto; flex-shrink: 0; }
+  header {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 200; height: var(--nav-h);
+    background: var(--bg-nav); backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; padding: 0 28px;
+  }
 
-    .nav-spacer { flex: 1; }
+  .nav-logo {
+    display: flex; align-items: center; gap: 10px;
+    text-decoration: none; color: var(--text);
+    font-weight: 700; font-size: 15px; letter-spacing: -0.02em;
+  }
+  .nav-logo img { height: 32px; width: auto; flex-shrink: 0; }
 
-    .nav-link {
-      font-size: 13.5px; color: var(--text-muted);
-      text-decoration: none; padding: 6px 12px; border-radius: 7px;
-      transition: all 0.15s;
-    }
-    .nav-link:hover { color: var(--text); background: var(--bg-surface); }
+  .nav-spacer { flex: 1; }
 
-    main {
-      padding-top: calc(var(--nav-h) + 80px);
-      padding-bottom: 96px;
-      max-width: 1080px;
-      margin: 0 auto;
-      padding-left: 28px;
-      padding-right: 28px;
-    }
+  .nav-link {
+    font-size: 13.5px; color: var(--text-muted);
+    text-decoration: none; padding: 6px 12px; border-radius: 7px;
+    transition: all 0.15s;
+  }
+  .nav-link:hover { color: var(--text); background: var(--bg-surface); }
 
-    .hero { text-align: center; margin-bottom: 64px; }
-    .eyebrow {
-      display: inline-block;
-      font-size: 11px; font-weight: 700;
-      letter-spacing: 0.12em; text-transform: uppercase;
-      color: var(--bp-green);
-      padding: 5px 12px; border-radius: 999px;
-      background: var(--bp-green-faint);
-      border: 1px solid var(--bp-green-border);
-      margin-bottom: 22px;
-    }
-    h1 {
-      font-size: 44px; font-weight: 800;
-      letter-spacing: -0.035em; line-height: 1.1;
-      color: #fff; margin-bottom: 18px;
-    }
-    h1 .accent { color: var(--bp-green); }
-    .lead {
-      font-size: 17px; line-height: 1.65;
-      color: var(--text-muted);
-      max-width: 620px; margin: 0 auto;
-    }
+  main {
+    padding-top: calc(var(--nav-h) + 80px);
+    padding-bottom: 96px;
+    max-width: 1080px;
+    margin: 0 auto;
+    padding-left: 28px;
+    padding-right: 28px;
+  }
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 18px;
-      margin-bottom: 64px;
-    }
+  .hero { text-align: center; margin-bottom: 64px; }
+  .eyebrow {
+    display: inline-block;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--bp-green);
+    padding: 5px 12px; border-radius: 999px;
+    background: var(--bp-green-faint);
+    border: 1px solid var(--bp-green-border);
+    margin-bottom: 22px;
+  }
+  h1 {
+    font-size: 44px; font-weight: 800;
+    letter-spacing: -0.035em; line-height: 1.1;
+    color: #fff; margin-bottom: 18px;
+  }
+  h1 .accent { color: var(--bp-green); }
+  .lead {
+    font-size: 17px; line-height: 1.65;
+    color: var(--text-muted);
+    max-width: 620px; margin: 0 auto;
+  }
 
-    .card {
-      display: block;
-      background: var(--bg-surface);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 26px;
-      text-decoration: none;
-      transition: border-color 0.18s, transform 0.18s, background 0.18s;
-      position: relative;
-    }
-    .card:hover {
-      border-color: var(--bp-green-border);
-      background: var(--bg-surface2);
-      transform: translateY(-2px);
-      text-decoration: none;
-    }
-    .card.disabled {
-      opacity: 0.55; cursor: not-allowed;
-      pointer-events: none;
-    }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 18px;
+    margin-bottom: 64px;
+  }
 
-    .card-icon {
-      width: 38px; height: 38px;
-      border-radius: 9px;
-      background: var(--bp-teal);
-      border: 1px solid var(--bp-teal-light);
-      display: flex; align-items: center; justify-content: center;
-      color: var(--bp-green);
-      margin-bottom: 16px;
-    }
-    .card-title-row {
-      display: flex; align-items: center; gap: 10px;
-      margin-bottom: 6px;
-    }
-    .card-title {
-      font-size: 16px; font-weight: 700;
-      color: var(--text); letter-spacing: -0.01em;
-    }
-    .badge {
-      font-size: 10.5px; font-weight: 700;
-      letter-spacing: 0.05em; text-transform: uppercase;
-      padding: 2px 7px; border-radius: 4px;
-      background: var(--bp-teal); color: var(--bp-green);
-      border: 1px solid var(--bp-teal-light);
-    }
-    .badge.gray {
-      background: var(--bg-surface2);
-      color: var(--text-faint);
-      border-color: var(--border);
-    }
-    .card-desc {
-      font-size: 13.5px; line-height: 1.6;
-      color: var(--text-muted);
-      margin-bottom: 14px;
-    }
-    .card-cta {
-      font-size: 12.5px; font-weight: 600;
-      color: var(--bp-green);
-      display: inline-flex; align-items: center; gap: 5px;
-    }
-    .card.disabled .card-cta { color: var(--text-faint); }
+  .card {
+    display: block;
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 26px;
+    text-decoration: none;
+    transition: border-color 0.18s, transform 0.18s, background 0.18s;
+    position: relative;
+  }
+  .card:hover {
+    border-color: var(--bp-green-border);
+    background: var(--bg-surface2);
+    transform: translateY(-2px);
+    text-decoration: none;
+  }
+  .card.disabled {
+    opacity: 0.55; cursor: not-allowed;
+    pointer-events: none;
+  }
 
-    .footer-note {
-      text-align: center;
-      font-size: 13px;
-      color: var(--text-faint);
-      padding-top: 28px;
-      border-top: 1px solid var(--border-soft);
-    }
-    .footer-note a { color: var(--bp-green); text-decoration: none; }
-    .footer-note a:hover { text-decoration: underline; }
+  .card-icon {
+    width: 38px; height: 38px;
+    border-radius: 9px;
+    background: var(--bp-teal);
+    border: 1px solid var(--bp-teal-light);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--bp-green);
+    margin-bottom: 16px;
+  }
+  .card-title-row {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 6px;
+  }
+  .card-title {
+    font-size: 16px; font-weight: 700;
+    color: var(--text); letter-spacing: -0.01em;
+  }
+  .badge {
+    font-size: 10.5px; font-weight: 700;
+    letter-spacing: 0.05em; text-transform: uppercase;
+    padding: 2px 7px; border-radius: 4px;
+    background: var(--bp-teal); color: var(--bp-green);
+    border: 1px solid var(--bp-teal-light);
+  }
+  .badge.gray {
+    background: var(--bg-surface2);
+    color: var(--text-faint);
+    border-color: var(--border);
+  }
+  .card-desc {
+    font-size: 13.5px; line-height: 1.6;
+    color: var(--text-muted);
+    margin-bottom: 14px;
+  }
+  .card-cta {
+    font-size: 12.5px; font-weight: 600;
+    color: var(--bp-green);
+    display: inline-flex; align-items: center; gap: 5px;
+  }
+  .card.disabled .card-cta { color: var(--text-faint); }
 
-    @media (max-width: 640px) {
-      h1 { font-size: 32px; }
-      .lead { font-size: 15px; }
-      main { padding-top: calc(var(--nav-h) + 48px); }
-    }
-  </style>
-</head>
-<body>
+  .footer-note {
+    text-align: center;
+    font-size: 13px;
+    color: var(--text-faint);
+    padding-top: 28px;
+    border-top: 1px solid var(--border-soft);
+  }
+  .footer-note a { color: var(--bp-green); text-decoration: none; }
+  .footer-note a:hover { text-decoration: underline; }
 
-<header>
-  <a href="/" class="nav-logo">
-    <img src="/assets/bitpanda-lettermark.png" alt="Bitpanda" />
-    Bitpanda Builders
-  </a>
-  <div class="nav-spacer"></div>
-  <a href="https://labs.bitpanda.com" target="_blank" rel="noopener" class="nav-link">Bitpanda Labs ↗</a>
-  <a href="https://developers.bitpanda.com" target="_blank" rel="noopener" class="nav-link">Developer API ↗</a>
-</header>
+  @media (max-width: 640px) {
+    h1 { font-size: 32px; }
+    .lead { font-size: 15px; }
+    main { padding-top: calc(var(--nav-h) + 48px); }
+  }
+</style>
 
 <main>
 
@@ -203,7 +190,7 @@
   </section>
 
   <section class="grid">
-    <a href="/mcp/" class="card">
+    <a href="{{ '/mcp/' | relative_url }}" class="card">
       <div class="card-icon">
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
           <rect x="2" y="2" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.6"/>
@@ -255,6 +242,3 @@
   </p>
 
 </main>
-
-</body>
-</html>

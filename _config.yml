@@ -1,0 +1,22 @@
+title: Bitpanda Builders
+description: >-
+  Documentation and tools for developers and AI builders connecting to Bitpanda.
+url: "https://builders.bitpanda.com"
+baseurl: ""
+
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+
+include:
+  - assets
+  - favicon.svg
+  - CNAME
+  - robots.txt
+
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - vendor/
+  - .github/

@@ -3,28 +3,48 @@
 🚀 **The official website for Bitpanda Builders** - documentation and tools for developers and AI builders connecting to Bitpanda.
 
 [![Live Site](https://img.shields.io/badge/Live-builders.bitpanda.com-blue)](https://builders.bitpanda.com)
-[![Static HTML](https://img.shields.io/badge/Built%20with-Static%20HTML-orange)](https://developer.mozilla.org/docs/Web/HTML)
+[![Jekyll](https://img.shields.io/badge/Built%20with-Jekyll-red)](https://jekyllrb.com/)
 [![GitHub Pages](https://img.shields.io/badge/Deployed%20on-GitHub%20Pages-green)](https://pages.github.com/)
 
 ## 🌟 About
 
-Bitpanda Builders is the developer hub for everything you can build on top of Bitpanda — the MCP server for AI agents, command-line tooling, and pre-built agent skills. This site documents how to connect, authenticate, and use those tools against your Bitpanda portfolio.
+Bitpanda Builders is the developer hub for everything you can build on top of Bitpanda — the MCP server for AI agents, command-line tooling, and pre-built agent skills. This site documents how to connect, authenticate, and use those tools with a Bitpanda account.
 
 ## 🚀 Quick Start
 
-No build step or dependencies — the site is plain HTML/CSS. To preview locally:
+### Prerequisites
+- Ruby 3.x
+- Bundler
 
-```bash
-git clone git@github.com:bitpanda-labs/builders-site.git
-cd builders-site
-python3 -m http.server 8080
-```
+### Local Development
 
-Then open http://localhost:8080.
+1. **Clone the repository:**
+   ```bash
+   git clone git@github.com:bitpanda-labs/builders-site.git
+   cd builders-site
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   bundle install
+   ```
+
+3. **Run the development server:**
+   ```bash
+   bundle exec jekyll serve
+   ```
+
+4. **View the site:**
+   Open [http://localhost:4000](http://localhost:4000) in your browser.
 
 ## 📁 Project Structure
 
 ```
+├── _config.yml             # Jekyll configuration
+├── _layouts/
+│   └── default.html        # Shared page layout
+├── _includes/
+│   └── header.html         # Shared site header
 ├── index.html              # Hub homepage
 ├── 404.html                # Branded 404 page
 ├── mcp/
@@ -33,9 +53,8 @@ Then open http://localhost:8080.
 │   └── bitpanda-lettermark.png
 ├── favicon.svg
 ├── robots.txt
-├── sitemap.xml
 ├── CNAME                   # Custom domain (builders.bitpanda.com)
-└── .nojekyll               # Disable Jekyll processing on GitHub Pages
+└── Gemfile                 # Ruby dependencies
 ```
 
 ## 🚀 Deployment
@@ -43,9 +62,6 @@ Then open http://localhost:8080.
 This site is automatically deployed to GitHub Pages when changes are pushed to the `main` branch.
 
 - **Live URL:** [https://builders.bitpanda.com](https://builders.bitpanda.com)
-- **Default Pages URL:** [https://bitpanda-labs.github.io/builders-site/](https://bitpanda-labs.github.io/builders-site/) (redirects to the live URL)
-
-The custom domain is set via the `CNAME` file at the repo root, with a Cloudflare DNS record managed in [`bitpanda-production-zones`](https://gitlab.com/bitpanda/it-platform-sre/cloud/cloudflare/bitpanda-production-zones).
 
 ## 🤝 Contributing
 
@@ -54,9 +70,9 @@ We welcome contributions! Please:
 1. **Fork the repository**
 2. **Create a feature branch**
 3. **Follow our standards:**
-  - Match the existing design tokens and component patterns
-  - Keep pages dependency-free (no JS frameworks, no build step)
-  - Test locally before submitting
+   - Match the existing design tokens and component patterns
+   - Keep pages dependency-light (no JS frameworks, no build step beyond Jekyll)
+   - Test locally before submitting
 4. **Submit a pull request**
 
 ## 📝 License
