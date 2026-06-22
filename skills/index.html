@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Bitpanda Agent Skills — Developer Documentation
-description: Pre-built agent skills for querying Bitpanda accounts. Portfolio overview, trade history, live prices, and transactions — all read-only, all JSON.
+description: Pre-built agent skills for querying Bitpanda accounts. Portfolio overview, trade history, live prices, and transactions.
 ---
 
 {% include docs-style.html %}
@@ -39,40 +39,42 @@ description: Pre-built agent skills for querying Bitpanda accounts. Portfolio ov
     <div class="content">
 
       <div class="breadcrumb" id="intro">Get Started</div>
-      <h1>Bitpanda Agent Skill</h1>
-      <p class="page-lead">A pre-packaged agent skill for querying Bitpanda accounts. Drop it into any agent that follows the <a href="https://agentskills.io/home" target="_blank" rel="noopener">Agent Skills Open Standard</a> — Claude Code, Cursor, custom orchestrators — and your assistant gains read-only access to portfolio, trades, prices, and transactions.</p>
+      <div class="h1-row">
+        <h1>Bitpanda Agent Skills</h1>
+      </div>
+      <p class="page-lead">An agent skill for querying Bitpanda accounts. Drop it into any agent that follows the <a href="https://agentskills.io/home" target="_blank" rel="noopener">Agent Skills Open Standard</a> — Claude Code, Cursor, custom orchestrators — and your assistant can query your portfolio, trades, prices, and transactions.</p>
 
       <div class="callout green">
         <svg class="callout-icon" viewBox="0 0 16 16" fill="none"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zm0 3a.75.75 0 110 1.5A.75.75 0 018 4zm-.75 3h1.5v4.5h-1.5V7z" fill="currentColor"/></svg>
         <span><strong>Read-only by design.</strong> Every command in this skill is read-only — no trading, orders, or write operations. Output is always JSON for clean agent parsing.</span>
       </div>
 
+
       <div class="page-divider" id="how-it-works"></div>
       <h2>How it works</h2>
-      <p>An <em>agent skill</em> is a directory with a <code>SKILL.md</code> manifest, executable scripts, and reference docs. The agent loads <code>SKILL.md</code> as context and learns when and how to invoke each command. The Bitpanda skill ships:</p>
+      <p>An <em>agent skill</em> is a directory with a <code>SKILL.md</code> manifest, executable scripts, and reference docs. The agent reads <code>SKILL.md</code> to know which commands are available and how to call them. The Bitpanda skill ships:</p>
       <ul style="margin:12px 0 14px 22px;color:var(--text-muted);font-size:13.5px;line-height:1.8">
         <li><code>SKILL.md</code> — agent-facing instructions and command catalog</li>
         <li><code>scripts/bitpanda.sh</code> — bash CLI that calls the Bitpanda API</li>
         <li><code>references/api_reference.md</code> — endpoint docs the agent can read</li>
       </ul>
-      <p>Authentication is by API key (<code>BITPANDA_API_KEY</code> environment variable). The skill is fully open-source, audited line-by-line.</p>
+      <p>Authentication is by API key (<code>BITPANDA_API_KEY</code> environment variable). The skill is fully open-source.</p>
 
       <div class="page-divider" id="install"></div>
       <h2>Install</h2>
       <p>The skill is a plain directory you drop into your agent's skills folder. Requirements: <code>curl</code>, <code>jq</code>, and a Bitpanda API key.</p>
 
       <ol class="steps">
-        <li><div><strong>Clone the skill</strong>
-          <p>Place it wherever your agent expects skills (e.g. <code>~/.claude/skills/</code> for Claude Code).</p>
-          <div class="code-block">
-            <div class="code-header"><span>shell</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
-            <pre><code>git clone https://github.com/bitpanda-labs/agent-skills.git
-cp -r agent-skills/bitpanda ~/.claude/skills/</code></pre>
-          </div>
+        <li><div><strong>Generate an API key</strong>
+          <p>Visit <a href="https://web.bitpanda.com/apikey" target="_blank" rel="noopener">web.bitpanda.com/apikey</a> and create an API key.</p>
         </div></li>
 
-        <li><div><strong>Generate an API key</strong>
-          <p>Visit <a href="https://web.bitpanda.com/my-account/apikey" target="_blank" rel="noopener">web.bitpanda.com/my-account/apikey</a> and create a key with read-only scopes.</p>
+        <li><div><strong>Download the skill</strong>
+          <div class="code-block" style="margin-top:10px">
+            <div class="code-header"><span>shell</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <pre><code>git clone https://github.com/bitpanda-labs/bitpanda-agent-skill bitpanda</code></pre>
+          </div>
+          <p>Drop the <code>bitpanda/</code> directory into your agent's skills folder.</p>
         </div></li>
 
         <li><div><strong>Set the environment variable</strong>
@@ -141,16 +143,9 @@ bash bitpanda/scripts/bitpanda.sh all-transactions --page-size 100</code></pre>
       <h2>FAQ</h2>
 
       <details>
-        <summary>Is this safe? Can the agent move my money?</summary>
-        <div class="faq-body">
-          <p>No. The skill only ever calls read-only Bitpanda API endpoints. There is no command for placing orders, transferring funds, or modifying account state. You can audit every script in the public repo before installing.</p>
-        </div>
-      </details>
-
-      <details>
         <summary>What's the difference between this and the MCP server?</summary>
         <div class="faq-body">
-          <p>The <a href="{{ '/mcp/' | relative_url }}">MCP server</a> is a hosted service that AI clients (Claude, ChatGPT, Cursor) connect to over the Model Context Protocol with OAuth. The agent skill is a local script bundle that any agent following the Agent Skills standard can use directly — no server, no OAuth, just an API key in your environment.</p>
+          <p>The <a href="{{ '/mcp/' | relative_url }}">MCP server</a> is a hosted service that AI clients (Claude, ChatGPT, Cursor) connect to over the Model Context Protocol using an API key or OAuth (coming soon). The agent skill is a local script bundle that any agent following the Agent Skills standard can use directly — no server, just an API key in your environment.</p>
           <p>Use MCP for consumer AI clients. Use the skill for local agents, custom orchestrators, or environments where you'd rather keep everything on your machine.</p>
         </div>
       </details>
@@ -158,23 +153,16 @@ bash bitpanda/scripts/bitpanda.sh all-transactions --page-size 100</code></pre>
       <details>
         <summary>Which agents support this format?</summary>
         <div class="faq-body">
-          <p>Any tool that follows the <a href="https://agentskills.io/home" target="_blank" rel="noopener">Agent Skills Open Standard</a> — Claude Code, Cursor, and a growing list of custom orchestrators. Since the skill is just a directory with a <code>SKILL.md</code> manifest, it's also trivial to wrap into your own framework.</p>
+          <p>Any tool that follows the <a href="https://agentskills.io/home" target="_blank" rel="noopener">Agent Skills Open Standard</a> — Claude Code, Cursor, and a growing list of custom orchestrators. Since the skill is just a directory with a <code>SKILL.md</code> manifest, it's easy to wrap into your own framework.</p>
         </div>
       </details>
 
       <details>
         <summary>Where do I get an API key?</summary>
         <div class="faq-body">
-          <p>From <a href="https://web.bitpanda.com/my-account/apikey" target="_blank" rel="noopener">web.bitpanda.com/my-account/apikey</a>. Generate a key with the read scopes you need (the skill only ever uses read scopes).</p>
+          <p>From <a href="https://web.bitpanda.com/apikey" target="_blank" rel="noopener">web.bitpanda.com/apikey</a>. Generate a key with the read scopes you need (the skill only ever uses read scopes).</p>
         </div>
       </details>
-
-      <h2 id="links">Resources</h2>
-      <p>
-        Source code: <a href="https://github.com/bitpanda-labs/agent-skills" target="_blank" rel="noopener">github.com/bitpanda-labs/agent-skills</a><br/>
-        Agent Skills standard: <a href="https://agentskills.io/home" target="_blank" rel="noopener">agentskills.io</a><br/>
-        API reference: <a href="https://developers.bitpanda.com" target="_blank" rel="noopener">developers.bitpanda.com</a>
-      </p>
 
     </div>
   </div>
@@ -188,7 +176,6 @@ bash bitpanda/scripts/bitpanda.sh all-transactions --page-size 100</code></pre>
       <li><a href="#commands">Commands</a></li>
       <li><a href="#prompts">Example prompts</a></li>
       <li><a href="#faq">FAQ</a></li>
-      <li><a href="#links">Resources</a></li>
     </ul>
   </aside>
 
