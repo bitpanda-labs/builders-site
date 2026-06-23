@@ -25,17 +25,17 @@ description: Connect Claude, ChatGPT, Cursor, or any MCP-compatible AI client to
           <svg style="width:14px;height:14px;margin-right:8px;opacity:0.45;flex-shrink:0" viewBox="0 0 16 16" fill="none"><path d="M8 1L1 4v4c0 3.5 3 6.5 7 7 4-.5 7-3.5 7-7V4L8 1z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
           Get started
         </a></li>
-        <li><a href="#quickstart">
-          <svg style="width:14px;height:14px;margin-right:8px;opacity:0.45;flex-shrink:0" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.5"/><rect x="9" y="1" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.5"/><rect x="1" y="9" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.5"/><rect x="9" y="9" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.5"/></svg>
-          AI clients
+        <li><a href="#api-key">
+          <svg style="width:14px;height:14px;margin-right:8px;opacity:0.45;flex-shrink:0" viewBox="0 0 16 16" fill="none"><rect x="3" y="7" width="10" height="8" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M5 7V5a3 3 0 016 0v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          API key setup
         </a></li>
         <li><a href="#tools">
           <svg style="width:14px;height:14px;margin-right:8px;opacity:0.45;flex-shrink:0" viewBox="0 0 16 16" fill="none"><path d="M2 4h12M2 8h12M2 12h7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
           Reference
         </a></li>
-        <li><a href="#api-key">
+        <li><a href="#oauth">
           <svg style="width:14px;height:14px;margin-right:8px;opacity:0.45;flex-shrink:0" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.5"/><path d="M8 5v3l2 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-          Advanced
+          OAuth
         </a></li>
         <li><a href="#faq">
           <svg style="width:14px;height:14px;margin-right:8px;opacity:0.45;flex-shrink:0" viewBox="0 0 16 16" fill="none"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zm0 3a.75.75 0 110 1.5A.75.75 0 018 4zm-.75 3h1.5v4.5h-1.5V7z" fill="currentColor"/></svg>
@@ -49,111 +49,41 @@ description: Connect Claude, ChatGPT, Cursor, or any MCP-compatible AI client to
     <div class="content">
 
       <div class="breadcrumb" id="intro">Get Started</div>
-      <h1>Bitpanda MCP Server</h1>
+      <div class="h1-row">
+        <h1>Bitpanda MCP Server</h1>
+      </div>
       <p class="page-lead">Connect your AI assistant — Claude, ChatGPT, Cursor, or any MCP-compatible client — directly to your Bitpanda account. Ask about your portfolio, check live prices, and review trade history in plain language.</p>
 
-      <div class="callout green">
-        <svg class="callout-icon" viewBox="0 0 16 16" fill="none"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zm0 3a.75.75 0 110 1.5A.75.75 0 018 4zm-.75 3h1.5v4.5h-1.5V7z" fill="currentColor"/></svg>
-        <span><strong>Read-only by design.</strong> All tools are strictly read-only. The server cannot place orders, move funds, or modify your account in any way.</span>
-      </div>
 
       <div class="page-divider" id="how-it-works"></div>
       <h2>How it works</h2>
-      <p>The <a href="https://modelcontextprotocol.io" target="_blank" rel="noopener">Model Context Protocol (MCP)</a> is an open standard that lets AI assistants securely connect to external services. The Bitpanda MCP server bridges your AI tool and the <a href="https://developers.bitpanda.com" target="_blank" rel="noopener">Bitpanda Developer API</a>, giving your assistant read-only access to your account data.</p>
-      <p>For consumer AI clients (Claude, ChatGPT, AI agents), authentication is handled via <strong style="color:var(--text)">OAuth</strong> — you authorize the connection through your Bitpanda account with no manual key management. For technical setups and self-hosted deployments, direct API key authentication via the <code>X-Api-Key</code> header is also supported.</p>
+      <p>The <a href="https://modelcontextprotocol.io" target="_blank" rel="noopener">Model Context Protocol (MCP)</a> is an open standard that lets AI assistants securely connect to external services. The Bitpanda MCP server bridges your AI tool and the <a href="https://developers.bitpanda.com" target="_blank" rel="noopener">Bitpanda Developer API</a>, giving your assistant access to your account data.</p>
+      <p>Authentication is via your <strong style="color:var(--text)">Bitpanda API key</strong> — generate one and pass it with your client config. OAuth support (no key required) is coming soon for Claude Desktop, ChatGPT, and other connector-directory clients.</p>
 
-      <div class="page-divider" id="quickstart"></div>
-      <h2>Quick start</h2>
-      <p>Most users connect via OAuth in under a minute. Pick your client below.</p>
+      <!-- ─── API key setup ─── -->
+      <div class="page-divider" id="api-key"></div>
+      <h2>API key setup</h2>
+      <p>Generate a Bitpanda API key and add it to your client config. Takes under a minute.</p>
 
-      <div class="tab-group">
-        <div class="tab-bar" role="tablist">
-          <button class="tab active" onclick="switchTab(event,'tab-gpt','qs')" role="tab">ChatGPT</button>
-          <button class="tab" onclick="switchTab(event,'tab-cd','qs')" role="tab">Claude Desktop</button>
-          <button class="tab" onclick="switchTab(event,'tab-cc','qs')" role="tab">Claude Code</button>
-          <button class="tab" onclick="switchTab(event,'tab-cur','qs')" role="tab">Cursor / VS Code</button>
-        </div>
-
-        <div id="tab-gpt" class="tab-panel active">
-          <ol class="steps">
-            <li><div><strong>Open the connector directory</strong><p>In ChatGPT, go to <em>Settings → Connectors</em> (or click the <em>+</em> menu in a chat → <em>Add apps &amp; connectors</em>).</p></div></li>
-            <li><div><strong>Find Bitpanda</strong><p>Search for <strong>Bitpanda</strong> in the directory and click <em>Connect</em>.</p></div></li>
-            <li><div><strong>Authorize</strong><p>ChatGPT redirects you to Bitpanda to log in and approve access. No API key required.</p></div></li>
-          </ol>
-        </div>
-
-        <div id="tab-cd" class="tab-panel">
-          <ol class="steps">
-            <li><div><strong>Open Connectors</strong><p>In Claude Desktop, go to <em>Customize → Connectors</em>.</p></div></li>
-            <li><div><strong>Find Bitpanda</strong><p>Browse the directory and click <em>Connect</em> on the <strong>Bitpanda</strong> entry.</p></div></li>
-            <li><div><strong>Authorize</strong><p>Claude opens a browser. Log in to Bitpanda and approve access — no API key required.</p></div></li>
-          </ol>
-        </div>
-
-        <div id="tab-cc" class="tab-panel">
-          <div class="code-block">
-            <div class="code-header">TERMINAL <button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
-            <pre><code>claude mcp add --transport http bitpanda https://mcp.bitpanda.com/mcp</code></pre>
-          </div>
-          <div style="padding:12px 20px 16px;font-size:13px;color:var(--text-muted);">Claude will open a browser to authorize your Bitpanda account via OAuth. No API key required.</div>
-        </div>
-
-        <div id="tab-cur" class="tab-panel">
-          <div class="code-block">
-            <div class="code-header">.cursor/mcp.json <button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
-            <pre><code>{
-  <span class="ky">"mcpServers"</span>: {
-    <span class="ky">"bitpanda"</span>: {
-      <span class="ky">"url"</span>: <span class="st">"https://mcp.bitpanda.com/mcp"</span>,
-      <span class="ky">"transport"</span>: <span class="st">"http"</span>
-    }
-  }
-}</code></pre>
-          </div>
-          <div style="padding:12px 20px 16px;font-size:13px;color:var(--text-muted);">On first use your editor opens a browser to authorize via Bitpanda OAuth. No API key required.</div>
-        </div>
-      </div>
+      <ol class="steps">
+        <li><div><strong>Log in to Bitpanda</strong><p>Go to <a href="https://web.bitpanda.com" target="_blank" rel="noopener">web.bitpanda.com</a> and sign in.</p></div></li>
+        <li><div><strong>Open API key settings</strong><p>Navigate to <a href="https://web.bitpanda.com/apikey" target="_blank" rel="noopener">web.bitpanda.com/apikey</a> or <em>Profile → API key</em>.</p></div></li>
+        <li><div><strong>Generate a new key</strong><p>Click <em>Generate new API key</em>. Copy it — you won't see it again.</p></div></li>
+      </ol>
 
       <!-- ─── Per-client sections ─── -->
-      <div class="page-divider" id="chatgpt"></div>
-      <h2>ChatGPT</h2>
-      <p>The Bitpanda MCP server is published in the ChatGPT connector directory. Install it directly from ChatGPT.</p>
-      <ol class="steps">
-        <li><div><strong>Open the connector directory</strong><p>In ChatGPT, go to <em>Settings → Connectors</em>, or click the <em>+</em> menu in any chat and choose <em>Add apps &amp; connectors</em>.</p></div></li>
-        <li><div><strong>Search for Bitpanda</strong><p>Find <strong style="color:var(--text)">Bitpanda</strong> in the directory and click <em>Connect</em>.</p></div></li>
-        <li><div><strong>Authorize via Bitpanda</strong><p>ChatGPT redirects you to Bitpanda's login page. Sign in and approve the connection — Bitpanda issues a short-lived token and ChatGPT manages it for you.</p></div></li>
-        <li><div><strong>Start asking</strong><p>Try: <em>"What is my current BTC value?"</em> or <em>"Summarize my trades from last month."</em> ChatGPT will prompt you to allow the Bitpanda connector to be used.</p></div></li>
-      </ol>
-      <div class="callout">
-        <svg class="callout-icon" viewBox="0 0 16 16" fill="none"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zm0 3a.75.75 0 110 1.5A.75.75 0 018 4zm-.75 3h1.5v4.5h-1.5V7z" fill="currentColor"/></svg>
-        <span>Connectors are available on ChatGPT Plus, Pro, Team, Enterprise, and Edu plans. To revoke access at any time, remove the connector from <em>Settings → Connectors</em>.</span>
-      </div>
-
-      <div class="page-divider" id="claude-desktop"></div>
-      <h2>Claude Desktop</h2>
-      <p>The Bitpanda MCP server is listed in Claude's connector directory. Add it from inside the app — no JSON config or restart required.</p>
-      <ol class="steps">
-        <li><div><strong>Open Connectors</strong><p>In Claude Desktop, go to <em>Customize → Connectors</em>. On Team or Enterprise plans, an organization owner first needs to add the connector under <em>Organization settings → Connectors</em>.</p></div></li>
-        <li><div><strong>Find Bitpanda</strong><p>Browse the directory and click <em>Connect</em> on the <strong>Bitpanda</strong> entry.</p></div></li>
-        <li><div><strong>Authorize via Bitpanda</strong><p>Claude opens a browser tab. Sign in to Bitpanda and approve the connection — Claude stores and refreshes the token automatically.</p></div></li>
-        <li><div><strong>Enable it in a chat</strong><p>Open a conversation, click the <em>+</em> button at the lower-left of the chat, and choose <em>Connectors</em> to enable Bitpanda for that chat. Try: <em>"Show me my top holdings."</em></p></div></li>
-      </ol>
-      <div class="callout">
-        <svg class="callout-icon" viewBox="0 0 16 16" fill="none"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zm0 3a.75.75 0 110 1.5A.75.75 0 018 4zm-.75 3h1.5v4.5h-1.5V7z" fill="currentColor"/></svg>
-        <span>Connectors are available on Claude <strong>Pro, Max, Team, and Enterprise</strong> plans. Manage or remove the connector at any time from <em>Customize → Connectors</em>.</span>
-      </div>
-
       <div class="page-divider" id="claude-code"></div>
       <h2>Claude Code</h2>
-      <p>Claude Code is Anthropic's CLI for AI-assisted development. Add the MCP server with a single command — it connects over HTTP and authenticates via OAuth.</p>
+      <p>Claude Code is Anthropic's CLI for AI-assisted development. Add the MCP server with a single command.</p>
       <ol class="steps">
-        <li><div><strong>Add the server</strong><p>Run the command below in your terminal.</p></div></li>
-        <li><div><strong>Authorize</strong><p>Claude opens a browser. Log in to Bitpanda and grant access — no API key needed.</p></div></li>
+        <li><div><strong>Add the server</strong><p>Run the command below in your terminal, substituting your API key.</p></div></li>
+        <li><div><strong>Verify</strong><p>Run <code>claude mcp list</code> to confirm the server is registered.</p></div></li>
         <li><div><strong>Start asking</strong><p>Try: <em>"What is my current BTC value?"</em> or <em>"Summarize my trades from last month."</em></p></div></li>
       </ol>
       <div class="code-block">
         <div class="code-header">TERMINAL <button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
-        <pre><code>claude mcp add --transport http bitpanda https://mcp.bitpanda.com/mcp</code></pre>
+        <pre><code>claude mcp add --transport http bitpanda https://mcp.bitpanda.com/mcp \
+  --header <span class="st">"X-Api-Key: YOUR_BITPANDA_API_KEY"</span></code></pre>
       </div>
       <div class="code-block">
         <div class="code-header">VERIFY <button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
@@ -162,7 +92,22 @@ description: Connect Claude, ChatGPT, Cursor, or any MCP-compatible AI client to
 
       <div class="page-divider" id="cursor"></div>
       <h2>Cursor / VS Code / Windsurf</h2>
-      <p>Most modern AI editors support remote MCP servers. Add the server URL — the OAuth flow runs in the browser on first use.</p>
+      <p>Most modern AI editors support remote MCP servers. Add the server URL and your API key to the config file.</p>
+      <h3>Cursor (.cursor/mcp.json)</h3>
+      <div class="code-block">
+        <div class="code-header">.cursor/mcp.json <button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+        <pre><code>{
+  <span class="ky">"mcpServers"</span>: {
+    <span class="ky">"bitpanda"</span>: {
+      <span class="ky">"url"</span>: <span class="st">"https://mcp.bitpanda.com/mcp"</span>,
+      <span class="ky">"transport"</span>: <span class="st">"http"</span>,
+      <span class="ky">"headers"</span>: {
+        <span class="ky">"X-Api-Key"</span>: <span class="st">"YOUR_BITPANDA_API_KEY"</span>
+      }
+    }
+  }
+}</code></pre>
+      </div>
       <h3>VS Code (.vscode/mcp.json)</h3>
       <div class="code-block">
         <div class="code-header">.vscode/mcp.json <button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
@@ -170,7 +115,10 @@ description: Connect Claude, ChatGPT, Cursor, or any MCP-compatible AI client to
   <span class="ky">"servers"</span>: {
     <span class="ky">"bitpanda"</span>: {
       <span class="ky">"type"</span>: <span class="st">"http"</span>,
-      <span class="ky">"url"</span>: <span class="st">"https://mcp.bitpanda.com/mcp"</span>
+      <span class="ky">"url"</span>: <span class="st">"https://mcp.bitpanda.com/mcp"</span>,
+      <span class="ky">"headers"</span>: {
+        <span class="ky">"X-Api-Key"</span>: <span class="st">"YOUR_BITPANDA_API_KEY"</span>
+      }
     }
   }
 }</code></pre>
@@ -179,36 +127,20 @@ description: Connect Claude, ChatGPT, Cursor, or any MCP-compatible AI client to
       <!-- ─── Tools ─── -->
       <div class="page-divider" id="tools"></div>
       <h2>Available tools</h2>
-      <p>All tools are <strong style="color:var(--text)">read-only</strong> and annotated with <code>readOnlyHint: true</code>.</p>
+      <p>All tools are annotated with <code>readOnlyHint: true</code>.</p>
 
-      <div class="tools-grid">
-        <div class="tool-card">
-          <div><span class="tool-card-tag">portfolio</span><div class="tool-card-name">get_portfolio</div></div>
-          <p>Aggregated portfolio with EUR valuations. Optional <code>sort_by</code>: <code>value</code> (default) or <code>name</code>.</p>
+      <div id="tools-grid" class="tools-grid">
+        <div class="tool-card tool-card--loading">
+          <div class="tool-card-skeleton"></div>
+          <div class="tool-card-skeleton tool-card-skeleton--short"></div>
         </div>
-        <div class="tool-card">
-          <div><span class="tool-card-tag">market-data</span><div class="tool-card-name">get_price</div></div>
-          <p>Current EUR price for a single asset by ticker symbol — BTC, ETH, SOL, and more.</p>
+        <div class="tool-card tool-card--loading">
+          <div class="tool-card-skeleton"></div>
+          <div class="tool-card-skeleton tool-card-skeleton--short"></div>
         </div>
-        <div class="tool-card">
-          <div><span class="tool-card-tag">market-data</span><div class="tool-card-name">list_prices</div></div>
-          <p>Ticker prices for all held assets. Set <code>all_assets=true</code> for the full market-wide list. Supports <code>limit</code>.</p>
-        </div>
-        <div class="tool-card">
-          <div><span class="tool-card-tag">market-data</span><div class="tool-card-name">get_asset</div></div>
-          <p>Asset metadata (name, symbol, type) by asset UUID.</p>
-        </div>
-        <div class="tool-card">
-          <div><span class="tool-card-tag">wallets</span><div class="tool-card-name">list_wallets</div></div>
-          <p>Asset wallet balances. Filter by <code>non_zero</code>, <code>asset_id</code>. Supports <code>limit</code> and <code>page_size</code>.</p>
-        </div>
-        <div class="tool-card">
-          <div><span class="tool-card-tag">transactions</span><div class="tool-card-name">list_transactions</div></div>
-          <p>Unified transaction history — deposits, withdrawals, transfers, trades. Filters: <code>wallet_id</code>, <code>flow</code>, <code>asset_id</code>, <code>from_including</code>, <code>to_excluding</code>. Set <code>all=true</code> to fetch all pages.</p>
-        </div>
-        <div class="tool-card">
-          <div><span class="tool-card-tag">trades</span><div class="tool-card-name">list_trades</div></div>
-          <p>Buy/sell trade history derived from transactions. Filters: <code>trade_type</code> (buy/sell), <code>asset_type</code>, date range. Set <code>all=true</code> to fetch all pages.</p>
+        <div class="tool-card tool-card--loading">
+          <div class="tool-card-skeleton"></div>
+          <div class="tool-card-skeleton tool-card-skeleton--short"></div>
         </div>
       </div>
 
@@ -226,44 +158,23 @@ description: Connect Claude, ChatGPT, Cursor, or any MCP-compatible AI client to
         </table>
       </div>
 
-      <!-- ─── API key (advanced) ─── -->
-      <div class="page-divider" id="api-key"></div>
-      <h2>API key setup <span style="font-size:12px;font-weight:600;padding:3px 8px;border-radius:5px;background:var(--bg-surface2);color:var(--text-faint);border:1px solid var(--border);vertical-align:middle;margin-left:8px;">Advanced</span></h2>
-      <p>Direct API key authentication is available for custom scripts, programmatic integrations, and clients that do not support OAuth. Pass your Bitpanda API key in the <code>X-Api-Key</code> header with each request.</p>
+      <!-- ─── OAuth (coming soon) ─── -->
+      <div class="page-divider" id="oauth"></div>
+      <h2>OAuth <span style="font-size:12px;font-weight:600;padding:3px 8px;border-radius:5px;background:var(--bg-surface2);color:var(--text-faint);border:1px solid var(--border);vertical-align:middle;margin-left:8px;">Coming soon</span></h2>
+      <p>OAuth support is on the roadmap — once available, connector-directory clients will be able to connect to Bitpanda with no API key or manual config required.</p>
 
-      <div class="callout warning">
-        <svg class="callout-icon" viewBox="0 0 16 16" fill="none"><path d="M8 1l7 13H1L8 1z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M8 6v4M8 11.5v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-        <span>If your client supports OAuth, prefer that — it requires no key management and limits exposure. Use API keys only when OAuth is not available.</span>
+      <div class="page-divider" id="chatgpt"></div>
+      <h2>ChatGPT</h2>
+      <div class="callout">
+        <svg class="callout-icon" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.5"/><path d="M8 5v3l2 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <span><strong>Coming soon.</strong> ChatGPT connector directory support is on the roadmap. Check back for updates.</span>
       </div>
 
-      <h3>Generate your API key</h3>
-      <ol class="steps">
-        <li><div><strong>Log in to Bitpanda</strong><p>Go to <a href="https://web.bitpanda.com" target="_blank" rel="noopener">web.bitpanda.com</a> and sign in.</p></div></li>
-        <li><div><strong>Open API key settings</strong><p>Navigate to <a href="https://web.bitpanda.com/apikey" target="_blank" rel="noopener">web.bitpanda.com/apikey</a> or <em>Profile → API key</em>.</p></div></li>
-        <li><div><strong>Generate a new key</strong><p>Click <em>Generate new API key</em>. Copy it — you won't see it again.</p></div></li>
-      </ol>
-
-      <h3>Use with any MCP client</h3>
-      <div class="code-block">
-        <div class="code-header">MCP CLIENT CONFIG <button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
-        <pre><code>{
-  <span class="ky">"mcpServers"</span>: {
-    <span class="ky">"bitpanda"</span>: {
-      <span class="ky">"url"</span>: <span class="st">"https://mcp.bitpanda.com/mcp"</span>,
-      <span class="ky">"headers"</span>: {
-        <span class="ky">"X-Api-Key"</span>: <span class="st">"YOUR_BITPANDA_API_KEY"</span>
-      }
-    }
-  }
-}</code></pre>
-      </div>
-
-      <h3>Claude Code with API key (stdio / local)</h3>
-      <div class="code-block">
-        <div class="code-header">TERMINAL <button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
-        <pre><code>claude mcp add bitpanda \
-  -e <span class="ky">BITPANDA_API_KEY</span>=<span class="st">your-key-here</span> \
-  -- uvx --from <span class="st">git+https://github.com/bitpanda-labs/bitpanda-mcp</span> bitpanda-mcp</code></pre>
+      <div class="page-divider" id="claude-desktop"></div>
+      <h2>Claude Desktop</h2>
+      <div class="callout">
+        <svg class="callout-icon" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.5"/><path d="M8 5v3l2 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <span><strong>Coming soon.</strong> Claude Desktop connector directory support is on the roadmap. Check back for updates.</span>
       </div>
 
       <!-- ─── FAQ ─── -->
@@ -272,20 +183,7 @@ description: Connect Claude, ChatGPT, Cursor, or any MCP-compatible AI client to
 
       <details>
         <summary>Do I need a Bitpanda account?</summary>
-        <div class="faq-body"><p>Yes. You need an active <a href="https://www.bitpanda.com" target="_blank" rel="noopener">Bitpanda</a> account. For OAuth-based clients (Claude, ChatGPT) just log in when prompted. For API key access, generate a key at <a href="https://web.bitpanda.com/apikey" target="_blank" rel="noopener">web.bitpanda.com/apikey</a>.</p></div>
-      </details>
-
-      <details>
-        <summary>Can my AI assistant place trades or move funds?</summary>
-        <div class="faq-body"><p>No. All tools are strictly read-only (<code>readOnlyHint: true</code>). The server cannot place orders, withdraw funds, or modify your account in any way.</p></div>
-      </details>
-
-      <details>
-        <summary>How does OAuth authentication work?</summary>
-        <div class="faq-body">
-          <p>When you connect via Claude, ChatGPT, or another OAuth-enabled client, the client redirects you to Bitpanda's login page. After you log in and approve access, Bitpanda issues a short-lived token to the MCP server — your Bitpanda password is never shared with your AI client.</p>
-          <p>The token is stored securely by your AI client and refreshed automatically.</p>
-        </div>
+        <div class="faq-body"><p>Yes. You need an active <a href="https://www.bitpanda.com" target="_blank" rel="noopener">Bitpanda</a> account. Generate an API key at <a href="https://web.bitpanda.com/apikey" target="_blank" rel="noopener">web.bitpanda.com/apikey</a>.</p></div>
       </details>
 
       <details>
@@ -299,9 +197,10 @@ description: Connect Claude, ChatGPT, Cursor, or any MCP-compatible AI client to
       </details>
 
       <details>
-        <summary>Do I need to install anything for OAuth-based clients?</summary>
-        <div class="faq-body"><p>No local installation required. Add <code>https://mcp.bitpanda.com/mcp</code> to your client config and authorize via browser. The server runs on Bitpanda's infrastructure.</p></div>
+        <summary>Is my API key sent to the AI model?</summary>
+        <div class="faq-body"><p>No. Your API key lives in your client config and is used server-side to authenticate requests to Bitpanda. The model never sees it.</p></div>
       </details>
+
 
     </div>
   </div>
@@ -312,23 +211,70 @@ description: Connect Claude, ChatGPT, Cursor, or any MCP-compatible AI client to
       On this page
     </div>
     <ul class="toc-list">
-      <li><a href="#intro" class="active">Introduction</a></li>
+      <li><a href="#intro" class="active">Overview</a></li>
       <li><a href="#how-it-works">How it works</a></li>
-      <li><a href="#quickstart">Quick start</a></li>
-      <li><a href="#chatgpt">ChatGPT</a></li>
-      <li><a href="#claude-desktop">Claude Desktop</a></li>
+      <li><a href="#api-key">API key setup</a></li>
       <li><a href="#claude-code">Claude Code</a></li>
       <li><a href="#cursor">Cursor / VS Code</a></li>
       <li><a href="#tools">Tools</a></li>
       <li><a href="#prompts">Prompts</a></li>
-      <li><a href="#api-key">API key setup</a></li>
+      <li><a href="#oauth">OAuth</a></li>
+      <li><a href="#chatgpt">ChatGPT</a></li>
+      <li><a href="#claude-desktop">Claude Desktop</a></li>
       <li><a href="#faq">FAQ</a></li>
     </ul>
   </aside>
 
 </div>
 
+<style>
+  @keyframes shimmer {
+    0%   { background-position: -400px 0; }
+    100% { background-position: 400px 0; }
+  }
+  .tool-card--loading {
+    pointer-events: none;
+  }
+  .tool-card-skeleton {
+    height: 14px; border-radius: 4px;
+    background: linear-gradient(90deg, var(--bg-surface2) 25%, var(--border) 50%, var(--bg-surface2) 75%);
+    background-size: 800px 100%;
+    animation: shimmer 1.4s infinite linear;
+    margin-bottom: 10px;
+  }
+  .tool-card-skeleton--short { width: 60%; }
+  #tools-error { color: var(--text-muted); font-size: 13.5px; padding: 12px 0; }
+</style>
+
 <script>
+  (function () {
+    const TOOLS_URL = '{{ "/assets/tools.json" | relative_url }}';
+
+    fetch(TOOLS_URL)
+      .then(r => r.json())
+      .then(groups => {
+        const grid = document.getElementById('tools-grid');
+        if (!Array.isArray(groups) || !groups.length) throw new Error('empty');
+
+        grid.innerHTML = groups.flatMap(group =>
+          (group.tools || []).map(tool =>
+            `<div class="tool-card">
+              <div><span class="tool-card-tag">${esc(group.group.toLowerCase())}</span><div class="tool-card-name">${esc(tool.name)}</div></div>
+              <p>${esc(tool.description || '')}</p>
+            </div>`
+          )
+        ).join('');
+      })
+      .catch(() => {
+        const grid = document.getElementById('tools-grid');
+        grid.innerHTML = '<p id="tools-error">Could not load tools — check back shortly.</p>';
+      });
+
+    function esc(str) {
+      return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+  })();
+
   function switchTab(e, targetId, groupId) {
     const panel = document.getElementById(targetId);
     panel.closest('.tab-group').querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
@@ -352,11 +298,10 @@ description: Connect Claude, ChatGPT, Cursor, or any MCP-compatible AI client to
   // Map every section id to the sidebar group it belongs to
   const sbGroup = {
     'intro': '#intro', 'how-it-works': '#intro',
-    'quickstart': '#quickstart',
-    'claude-code': '#quickstart', 'claude-desktop': '#quickstart',
-    'chatgpt': '#quickstart', 'cursor': '#quickstart',
+    'api-key': '#api-key',
+    'claude-code': '#api-key', 'cursor': '#api-key',
     'tools': '#tools', 'prompts': '#tools',
-    'api-key': '#api-key', 
+    'oauth': '#oauth', 'chatgpt': '#oauth', 'claude-desktop': '#oauth',
     'faq': '#faq',
   };
 

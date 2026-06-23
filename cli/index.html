@@ -29,7 +29,7 @@ description: A command-line tool for the Bitpanda Developer API. View your portf
         </a></li>
         <li><a href="#advanced">
           <svg style="width:14px;height:14px;margin-right:8px;opacity:0.45;flex-shrink:0" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.5"/><path d="M8 5v3l2 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-          Advanced
+          Shell completion
         </a></li>
       </ul>
     </div>
@@ -39,13 +39,16 @@ description: A command-line tool for the Bitpanda Developer API. View your portf
     <div class="content">
 
       <div class="breadcrumb" id="intro">Get Started</div>
-      <h1>Bitpanda CLI</h1>
+      <div class="h1-row">
+        <h1>Bitpanda CLI</h1>
+      </div>
       <p class="page-lead">A fast, scriptable command-line tool for the <a href="https://developers.bitpanda.com" target="_blank" rel="noopener">Bitpanda Developer API</a>. View your portfolio, check live prices, and browse trades and transactions — all from your terminal.</p>
 
       <div class="callout green">
         <svg class="callout-icon" viewBox="0 0 16 16" fill="none"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zm0 3a.75.75 0 110 1.5A.75.75 0 018 4zm-.75 3h1.5v4.5h-1.5V7z" fill="currentColor"/></svg>
         <span><strong>Read-only.</strong> All commands are read-only. The CLI cannot place orders, move funds, or modify your account.</span>
       </div>
+
 
       <div class="page-divider" id="install"></div>
       <h2>Install</h2>
@@ -54,11 +57,8 @@ description: A command-line tool for the Bitpanda Developer API. View your portf
       <div class="tab-group">
         <div class="tab-bar" role="tablist">
           <button class="tab active" onclick="switchTab(event,'tab-brew','inst')" role="tab">Homebrew</button>
-          <button class="tab" onclick="switchTab(event,'tab-shell','inst')" role="tab">Shell script</button>
           <button class="tab" onclick="switchTab(event,'tab-deb','inst')" role="tab">Debian / Ubuntu</button>
           <button class="tab" onclick="switchTab(event,'tab-rpm','inst')" role="tab">Fedora / RHEL</button>
-          <button class="tab" onclick="switchTab(event,'tab-go','inst')" role="tab">Go</button>
-          <button class="tab" onclick="switchTab(event,'tab-src','inst')" role="tab">From source</button>
         </div>
 
         <div class="tab-panel active" id="tab-brew">
@@ -69,16 +69,7 @@ description: A command-line tool for the Bitpanda Developer API. View your portf
           <p style="font-size:13px;color:var(--text-muted)">Available for macOS and Linux via Homebrew.</p>
         </div>
 
-        <div class="tab-panel" id="tab-shell">
-          <div class="code-block">
-            <div class="code-header"><span>shell</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
-            <pre><code>curl -fsSL https://raw.githubusercontent.com/bitpanda-labs/bitpanda-cli/main/install.sh | sh</code></pre>
-          </div>
-          <p style="font-size:13px;color:var(--text-muted)">Detects your OS and architecture, downloads the matching binary.</p>
-        </div>
-
         <div class="tab-panel" id="tab-deb">
-          <p style="padding:12px 0;font-size:13px;color:var(--text-muted)">Download the <code>.deb</code> from the <a href="https://github.com/bitpanda-labs/bitpanda-cli/releases/latest" target="_blank" rel="noopener">latest release</a>, then:</p>
           <div class="code-block">
             <div class="code-header"><span>shell</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
             <pre><code>sudo dpkg -i bp_*_linux_amd64.deb</code></pre>
@@ -86,35 +77,16 @@ description: A command-line tool for the Bitpanda Developer API. View your portf
         </div>
 
         <div class="tab-panel" id="tab-rpm">
-          <p style="padding:12px 0;font-size:13px;color:var(--text-muted)">Download the <code>.rpm</code> from the <a href="https://github.com/bitpanda-labs/bitpanda-cli/releases/latest" target="_blank" rel="noopener">latest release</a>, then:</p>
           <div class="code-block">
             <div class="code-header"><span>shell</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
             <pre><code>sudo rpm -i bp_*_linux_amd64.rpm</code></pre>
           </div>
         </div>
-
-        <div class="tab-panel" id="tab-go">
-          <div class="code-block">
-            <div class="code-header"><span>shell</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
-            <pre><code>go install github.com/bitpanda-labs/bitpanda-cli/cmd/bp@latest</code></pre>
-          </div>
-        </div>
-
-        <div class="tab-panel" id="tab-src">
-          <div class="code-block">
-            <div class="code-header"><span>shell</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
-            <pre><code>git clone https://github.com/bitpanda-labs/bitpanda-cli.git
-cd bitpanda-cli
-make install</code></pre>
-          </div>
-        </div>
       </div>
-
-      <p style="font-size:13px;color:var(--text-muted)">Pre-built binaries for all platforms are also available on the <a href="https://github.com/bitpanda-labs/bitpanda-cli/releases/latest" target="_blank" rel="noopener">releases page</a>.</p>
 
       <div class="page-divider" id="configure"></div>
       <h2>Configure</h2>
-      <p><code>bp</code> needs a Bitpanda API key. Generate one at <a href="https://web.bitpanda.com/my-account/apikey" target="_blank" rel="noopener">web.bitpanda.com/my-account/apikey</a> — read-only scopes are sufficient.</p>
+      <p><code>bp</code> needs a Bitpanda API key. Generate one at <a href="https://web.bitpanda.com/apikey" target="_blank" rel="noopener">web.bitpanda.com/apikey</a>.</p>
       <p>Provide the key in one of three ways (highest priority first):</p>
 
       <ol class="steps">
@@ -205,13 +177,6 @@ bp portfolio -o json | jq '.[] | select(.eur_value &gt; 100)'</code></pre>
 
       <p>To make it permanent, append the matching command to your shell rc file (<code>~/.bashrc</code>, <code>~/.zshrc</code>, etc.).</p>
 
-      <h2 id="links">Resources</h2>
-      <p>
-        Source code: <a href="https://github.com/bitpanda-labs/bitpanda-cli" target="_blank" rel="noopener">github.com/bitpanda-labs/bitpanda-cli</a><br/>
-        Releases: <a href="https://github.com/bitpanda-labs/bitpanda-cli/releases" target="_blank" rel="noopener">github.com/bitpanda-labs/bitpanda-cli/releases</a><br/>
-        API reference: <a href="https://developers.bitpanda.com" target="_blank" rel="noopener">developers.bitpanda.com</a>
-      </p>
-
     </div>
   </div>
 
@@ -223,7 +188,6 @@ bp portfolio -o json | jq '.[] | select(.eur_value &gt; 100)'</code></pre>
       <li><a href="#configure">Configure</a></li>
       <li><a href="#commands">Commands</a></li>
       <li><a href="#advanced">Shell completion</a></li>
-      <li><a href="#links">Resources</a></li>
     </ul>
   </aside>
 
