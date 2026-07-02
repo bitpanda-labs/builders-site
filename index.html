@@ -1,31 +1,26 @@
 ---
 layout: default
-title: Bitpanda Builders
-description: Documentation and tools for connecting AI agents, command-line workflows, and custom skills to your Bitpanda account.
+title: Bitpanda Builders — Coming soon
+description: Something for builders is on its way.
 ---
 
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --bp-green:        #2cec9a;
-    --bp-green-dim:    #20d488;
-    --bp-green-faint:  rgba(44, 236, 154, 0.07);
-    --bp-green-border: rgba(44, 236, 154, 0.2);
-    --bp-teal:         #103e36;
-    --bp-teal-light:   #174f44;
+    /* Bitpanda brand palette */
+    --bp-green:       #2cec9a;              /* primary green */
+    --bp-green-soft:  rgba(44, 236, 154, 0.6);
+    --bp-teal:        #103e36;              /* brand teal (RGB 16 62 54) */
+    --bp-black:       #000000;              /* brand black */
+    --bp-grey:        #b2b2b2;              /* brand neutral grey (RGB 178) */
 
-    --bg:          #0C0C0E;
-    --bg-nav:      rgba(12, 12, 14, 0.92);
-    --bg-surface:  #161619;
-    --bg-surface2: #1C1C21;
-    --border:      #222228;
-    --border-soft: #1A1A1F;
-    --text:        #F2F2F5;
-    --text-muted:  #8A8A9A;
-    --text-faint:  #44444F;
-
-    --nav-h: 56px;
+    --bg:             var(--bp-black);
+    --bg-nav:         rgba(0, 0, 0, 0.7);
+    --border:         rgba(255, 255, 255, 0.06);
+    --text:           #F2F2F5;
+    --text-muted:     var(--bp-grey);
+    --nav-h:          56px;
   }
 
   html { scroll-behavior: smooth; }
@@ -34,239 +29,190 @@ description: Documentation and tools for connecting AI agents, command-line work
     font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", sans-serif;
     background: var(--bg);
     color: var(--text);
-    line-height: 1.65;
-    font-size: 14.5px;
     min-height: 100vh;
-  }
-
-  header {
-    position: fixed; top: 0; left: 0; right: 0;
-    z-index: 200; height: var(--nav-h);
-    background: var(--bg-nav); backdrop-filter: blur(16px);
-    border-bottom: 1px solid var(--border);
-    display: flex; align-items: center; padding: 0 28px;
-  }
-
-  .nav-logo {
-    display: flex; align-items: center; gap: 10px;
-    text-decoration: none; color: var(--text);
-    font-weight: 700; font-size: 15px; letter-spacing: -0.02em;
-  }
-  .nav-logo img { height: 32px; width: auto; flex-shrink: 0; }
-
-  .nav-spacer { flex: 1; }
-
-  .nav-link {
-    font-size: 13.5px; color: var(--text-muted);
-    text-decoration: none; padding: 6px 12px; border-radius: 7px;
-    transition: all 0.15s;
-  }
-  .nav-link:hover { color: var(--text); background: var(--bg-surface); }
-
-  main {
-    padding-top: calc(var(--nav-h) + 80px);
-    padding-bottom: 96px;
-    max-width: 1080px;
-    margin: 0 auto;
-    padding-left: 28px;
-    padding-right: 28px;
-  }
-
-  .hero { text-align: center; margin-bottom: 64px; }
-  .eyebrow {
-    display: inline-block;
-    font-size: 11px; font-weight: 700;
-    letter-spacing: 0.12em; text-transform: uppercase;
-    color: var(--bp-green);
-    padding: 5px 12px; border-radius: 999px;
-    background: var(--bp-green-faint);
-    border: 1px solid var(--bp-green-border);
-    margin-bottom: 22px;
-  }
-  h1 {
-    font-size: 44px; font-weight: 800;
-    letter-spacing: -0.035em; line-height: 1.1;
-    color: #fff; margin-bottom: 18px;
-  }
-  h1 .accent { color: var(--bp-green); }
-  .lead {
-    font-size: 17px; line-height: 1.65;
-    color: var(--text-muted);
-    max-width: 620px; margin: 0 auto;
-  }
-
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 18px;
-    margin-bottom: 64px;
-  }
-
-  .card {
-    display: block;
-    background: var(--bg-surface);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 26px;
-    text-decoration: none;
-    transition: border-color 0.18s, transform 0.18s, background 0.18s;
     position: relative;
+    overflow: hidden;
   }
-  .card:hover {
-    border-color: var(--bp-green-border);
-    background: var(--bg-surface2);
-    transform: translateY(-2px);
-    text-decoration: none;
-  }
-  .card.disabled {
-    opacity: 0.55; cursor: not-allowed;
+
+  /* ---- Layered animated aurora backdrop ---- */
+  .aurora {
+    position: fixed; inset: 0;
+    z-index: 0;
     pointer-events: none;
+    filter: blur(10px);
+  }
+  .aurora span {
+    position: absolute;
+    border-radius: 50%;
+    mix-blend-mode: screen;
+    opacity: 0.55;
+    will-change: transform;
+  }
+  .aurora .a1 {
+    width: 60vw; height: 60vw;
+    top: -20%; left: -10%;
+    background: radial-gradient(circle, rgba(44,236,154,0.32) 0%, transparent 60%);
+    animation: drift1 22s ease-in-out infinite;
+  }
+  .aurora .a2 {
+    width: 50vw; height: 50vw;
+    bottom: -25%; right: -10%;
+    background: radial-gradient(circle, rgba(16,62,54,0.85) 0%, transparent 60%);
+    animation: drift2 28s ease-in-out infinite;
+  }
+  .aurora .a3 {
+    width: 40vw; height: 40vw;
+    top: 30%; left: 45%;
+    background: radial-gradient(circle, rgba(16,62,54,0.55) 0%, transparent 60%);
+    animation: drift3 25s ease-in-out infinite;
+  }
+  @keyframes drift1 {
+    0%,100% { transform: translate(0,0) scale(1); }
+    50%     { transform: translate(12vw, 10vh) scale(1.15); }
+  }
+  @keyframes drift2 {
+    0%,100% { transform: translate(0,0) scale(1.1); }
+    50%     { transform: translate(-14vw, -8vh) scale(1); }
+  }
+  @keyframes drift3 {
+    0%,100% { transform: translate(-50%, 0) scale(1); }
+    50%     { transform: translate(-40%, -12vh) scale(1.2); }
   }
 
-  .card-icon {
-    width: 38px; height: 38px;
-    border-radius: 9px;
-    background: var(--bp-teal);
-    border: 1px solid var(--bp-teal-light);
-    display: flex; align-items: center; justify-content: center;
-    color: var(--bp-green);
-    margin-bottom: 16px;
+  /* ---- Fine grid + vignette for depth ---- */
+  .grid-overlay {
+    position: fixed; inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(circle at 50% 45%, black 0%, transparent 75%);
+    -webkit-mask-image: radial-gradient(circle at 50% 45%, black 0%, transparent 75%);
   }
-  .card-title-row {
-    display: flex; align-items: center; gap: 10px;
-    margin-bottom: 6px;
+  .vignette {
+    position: fixed; inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: radial-gradient(circle at 50% 45%, transparent 40%, rgba(0,0,0,0.85) 100%);
   }
-  .card-title {
-    font-size: 16px; font-weight: 700;
-    color: var(--text); letter-spacing: -0.01em;
-  }
-  .badge {
-    font-size: 10.5px; font-weight: 700;
-    letter-spacing: 0.05em; text-transform: uppercase;
-    padding: 2px 7px; border-radius: 4px;
-    background: var(--bp-teal); color: var(--bp-green);
-    border: 1px solid var(--bp-teal-light);
-  }
-  .badge.gray {
-    background: var(--bg-surface2);
-    color: var(--text-faint);
-    border-color: var(--border);
-  }
-  .card-desc {
-    font-size: 13.5px; line-height: 1.6;
-    color: var(--text-muted);
-    margin-bottom: 14px;
-  }
-  .card-cta {
-    font-size: 12.5px; font-weight: 600;
-    color: var(--bp-green);
-    display: inline-flex; align-items: center; gap: 5px;
-  }
-  .card.disabled .card-cta { color: var(--text-faint); }
 
-  .footer-note {
+  /* ---- Header: hidden on the coming-soon page for a clean full-screen look ---- */
+  header { display: none; }
+
+  /* ---- Center stage ---- */
+  main {
+    position: relative;
+    z-index: 10;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     text-align: center;
-    font-size: 13px;
-    color: var(--text-faint);
-    padding-top: 28px;
-    border-top: 1px solid var(--border-soft);
+    padding: 28px;
   }
-  .footer-note a { color: var(--bp-green); text-decoration: none; }
-  .footer-note a:hover { text-decoration: underline; }
 
-  @media (max-width: 640px) {
-    h1 { font-size: 32px; }
-    .lead { font-size: 15px; }
-    main { padding-top: calc(var(--nav-h) + 48px); }
+  .badge {
+    display: inline-flex; align-items: center; gap: 9px;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--bp-green);
+    padding: 7px 16px; border-radius: 999px;
+    background: rgba(44, 236, 154, 0.06);
+    border: 1px solid rgba(44, 236, 154, 0.22);
+    margin-bottom: 34px;
+    opacity: 0;
+    animation: rise 0.9s 0.1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
   }
+  .badge .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--bp-green);
+    box-shadow: 0 0 0 0 var(--bp-green-soft);
+    animation: pulse 2.4s ease-out infinite;
+  }
+  @keyframes pulse {
+    0%   { box-shadow: 0 0 0 0 var(--bp-green-soft); }
+    70%  { box-shadow: 0 0 0 8px rgba(44, 236, 154, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(44, 236, 154, 0); }
+  }
+
+  h1 {
+    font-size: clamp(44px, 9vw, 96px);
+    font-weight: 800;
+    letter-spacing: -0.045em;
+    line-height: 1.02;
+    margin-bottom: 22px;
+    opacity: 0;
+    animation: rise 1s 0.25s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  }
+  /* Shimmering gradient sweep across the headline */
+  h1 .shine {
+    background: linear-gradient(
+      100deg,
+      #ffffff 0%, #ffffff 35%,
+      var(--bp-green) 50%,
+      #ffffff 65%, #ffffff 100%
+    );
+    background-size: 250% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    animation: shimmer 6s ease-in-out infinite;
+  }
+  @keyframes shimmer {
+    0%   { background-position: 150% 0; }
+    50%  { background-position: -50% 0; }
+    100% { background-position: 150% 0; }
+  }
+
+  .lead {
+    font-size: 16px;
+    color: var(--text-muted);
+    max-width: 460px;
+    line-height: 1.7;
+    opacity: 0;
+    animation: rise 1s 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  }
+
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .aurora span, .badge .dot, h1 .shine { animation: none; }
+    .badge, h1, .lead { animation: none; opacity: 1; }
+    h1 .shine { -webkit-text-fill-color: #fff; color: #fff; }
+  }
+
+  /* Discreet unlock link — barely visible until hovered */
+  .unlock {
+    position: fixed;
+    bottom: 22px; right: 24px;
+    z-index: 20;
+    font-size: 12px; letter-spacing: 0.02em;
+    color: rgba(255, 255, 255, 0.14);
+    text-decoration: none;
+    transition: color 0.25s ease;
+  }
+  .unlock:hover { color: var(--bp-green); }
 </style>
 
+<div class="aurora">
+  <span class="a1"></span>
+  <span class="a2"></span>
+  <span class="a3"></span>
+</div>
+<div class="grid-overlay"></div>
+<div class="vignette"></div>
+
 <main>
-
-  <section class="hero">
-    <div class="eyebrow">For developers and AI builders</div>
-    <h1>Build with <span class="accent">Bitpanda</span>.</h1>
-    <p class="lead">Documentation and tools for connecting AI agents, command-line workflows, and custom skills to your Bitpanda account.</p>
-  </section>
-
-  <section class="grid">
-    <a href="{{ '/mcp/' | relative_url }}" class="card">
-      <div class="card-icon">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-          <rect x="2" y="2" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.6"/>
-          <rect x="11" y="2" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.6"/>
-          <rect x="2" y="11" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.6"/>
-          <rect x="11" y="11" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.6"/>
-        </svg>
-      </div>
-      <div class="card-title-row">
-        <span class="card-title">MCP Server</span>
-        <span class="badge">Available</span>
-      </div>
-      <p class="card-desc">Connect Claude, ChatGPT, Cursor, or any MCP-compatible AI client to your Bitpanda portfolio.</p>
-      <span class="card-cta">Read the docs →</span>
-    </a>
-
-    <a href="{{ '/cli/' | relative_url }}" class="card">
-      <div class="card-icon">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-          <path d="M3 5l4 4-4 4M9 13h8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </div>
-      <div class="card-title-row">
-        <span class="card-title">CLI</span>
-        <span class="badge">Available</span>
-      </div>
-      <p class="card-desc">Command-line access to your Bitpanda portfolio for scripts, automations, and quick lookups from the terminal.</p>
-      <span class="card-cta">Read the docs →</span>
-    </a>
-
-    <a href="{{ '/skills/' | relative_url }}" class="card">
-      <div class="card-icon">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-          <path d="M10 2l2.4 5 5.6.8-4 3.9.9 5.5L10 14.7 5.1 17.2 6 11.7 2 7.8l5.6-.8L10 2z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
-        </svg>
-      </div>
-      <div class="card-title-row">
-        <span class="card-title">Agent Skills</span>
-        <span class="badge">Available</span>
-      </div>
-      <p class="card-desc">Pre-built skills and prompt templates for AI agents working with Bitpanda data — portfolio analysis, reporting, and more.</p>
-      <span class="card-cta">Read the docs →</span>
-    </a>
-
-    <a href="https://docs.fusion.bitpanda.com/" target="_blank" rel="noopener" class="card">
-      <div class="card-icon">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-          <path d="M3 10h14M10 3l7 7-7 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </div>
-      <div class="card-title-row">
-        <span class="card-title">Fusion API</span>
-        <span class="badge">Available</span>
-      </div>
-      <p class="card-desc">Programmatic access to trading, order management, balances, and trade history. Authenticate with a scoped API key from your account settings.</p>
-      <span class="card-cta">Read the docs ↗</span>
-    </a>
-
-    <a href="https://developers.bitpanda.com" target="_blank" rel="noopener" class="card">
-      <div class="card-icon">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-          <path d="M7 4l-5 6 5 6M13 4l5 6-5 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </div>
-      <div class="card-title-row">
-        <span class="card-title">Developer API</span>
-        <span class="badge">Available</span>
-      </div>
-      <p class="card-desc">The underlying REST API powering every tool above. Build directly against Bitpanda's portfolio, prices, trades, and transactions endpoints.</p>
-      <span class="card-cta">Read the docs ↗</span>
-    </a>
-  </section>
-
-  <p class="footer-note">
-    Maintained by <a href="https://labs.bitpanda.com" target="_blank" rel="noopener">Bitpanda Labs</a>.
-    Need an API key? Generate one at <a href="https://web.bitpanda.com/apikey" target="_blank" rel="noopener">web.bitpanda.com/apikey</a>.
-  </p>
-
+  <div class="badge"><span class="dot"></span> Coming soon</div>
+  <h1><span class="shine">Something new is coming.</span></h1>
+  <p class="lead">A new home for builders at Bitpanda is on its way.</p>
 </main>
+
+<a href="{{ '/home/' | relative_url }}" class="unlock" rel="nofollow">Enter →</a>
