@@ -1,8 +1,9 @@
 title: Bitpanda Builders
 description: >-
   Documentation and tools for developers and AI builders connecting to Bitpanda.
-url: "https://builders.bitpanda.com"
-baseurl: ""
+# Temporary: served on the GitHub Pages project domain until builders.bitpanda.com is mapped.
+url: "https://bitpanda-labs.github.io"
+baseurl: "/builders-site"
 
 plugins:
   - jekyll-feed
@@ -11,7 +12,6 @@ plugins:
 include:
   - assets
   - favicon.svg
-  - CNAME
   - robots.txt
 
 exclude:
